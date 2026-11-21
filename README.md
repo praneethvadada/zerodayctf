@@ -1,12 +1,12 @@
 # ZerodayCTF
 
-**ZerodayCTF** is a Capture The Flag (CTF) platform hosted at **[zerodayctf.com](https://zerodayctf.com)**.
+**ZerodayCTF** is a Capture The Flag (CTF) platform hosted at **[www.zerodayctf.com](https://www.zerodayctf.com)**.
 
 > Logo and final branding: coming soon.
 
 ## What is ZerodayCTF?
 
-ZerodayCTF is a self-hosted CTF platform where players solve security challenges, submit flags, and compete on a live scoreboard, either individually or in teams. Organizers manage everything (challenges, users, scoring, content, schedule) from a built-in admin panel.
+ZerodayCTF is a self-hosted CTF platform where players solve security challenges, submit flags, and compete on a live scoreboard, as individual (solo) participants. Organizers manage everything (challenges, users, scoring, content, schedule) from a built-in admin panel.
 
 ## Features
 

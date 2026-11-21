@@ -7,7 +7,7 @@ services:
     environment:
       - UPLOAD_FOLDER=/var/uploads
       - DATABASE_URL=mysql+pymysql://ctfd:${DB_PASSWORD:?Set DB_PASSWORD in .env}@db/ctfd
-      - REDIS_URL=redis://cache:6379
+      - REDIS_URL=redis://:${REDIS_PASSWORD:?Set REDIS_PASSWORD in .env}@cache:6379
       - SECRET_KEY=${SECRET_KEY:?Set SECRET_KEY in .env}
       - WORKERS=${WORKERS:-4}
       - UPDATE_CHECK=false
@@ -55,6 +55,7 @@ services:
     restart: always
     environment:
       - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:?Set DB_ROOT_PASSWORD in .env}
+      - MARIADB_ROOT_HOST=localhost
       - MARIADB_USER=ctfd
       - MARIADB_PASSWORD=${DB_PASSWORD:?Set DB_PASSWORD in .env}
       - MARIADB_DATABASE=ctfd
@@ -69,6 +70,7 @@ services:
   cache:
     image: redis:7-alpine
     restart: always
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:?Set REDIS_PASSWORD in .env}", "--appendonly", "no"]
     volumes:
     - .data/redis:/data
     networks:
