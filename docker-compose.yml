@@ -2,13 +2,16 @@ services:
   ctfd:
     build: .
     restart: always
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     environment:
       - UPLOAD_FOLDER=/var/uploads
-      - DATABASE_URL=mysql+pymysql://ctfd:ctfd@db/ctfd
+      - DATABASE_URL=mysql+pymysql://ctfd:${DB_PASSWORD:?Set DB_PASSWORD in .env}@db/ctfd
       - REDIS_URL=redis://cache:6379
-      - WORKERS=1
+      - SECRET_KEY=${SECRET_KEY:?Set SECRET_KEY in .env}
+      - WORKERS=${WORKERS:-4}
+      - UPDATE_CHECK=false
+      - SESSION_COOKIE_SECURE=${SESSION_COOKIE_SECURE:-false}
       - LOG_FOLDER=/var/log/CTFd
       - ACCESS_LOG=-
       - ERROR_LOG=-
@@ -51,9 +54,9 @@ services:
     image: mariadb:10.11
     restart: always
     environment:
-      - MARIADB_ROOT_PASSWORD=ctfd
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:?Set DB_ROOT_PASSWORD in .env}
       - MARIADB_USER=ctfd
-      - MARIADB_PASSWORD=ctfd
+      - MARIADB_PASSWORD=${DB_PASSWORD:?Set DB_PASSWORD in .env}
       - MARIADB_DATABASE=ctfd
       - MARIADB_AUTO_UPGRADE=1
     volumes:
@@ -64,7 +67,7 @@ services:
     command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800, --log-warnings=0]
 
   cache:
-    image: redis:4
+    image: redis:7-alpine
     restart: always
     volumes:
     - .data/redis:/data
