@@ -226,12 +226,8 @@
 							</small>
 						</div>
 
-						<div class="mb-3 form-check">
-							<label class="form-check-label">
-								<input class="form-check-input" type="checkbox" value="" id="newsletter-checkbox" checked>
-								{% trans %}Subscribe email address to the ZeroDayCTF newsletter for news and updates{% endtrans %}
-							</label>
-						</div>
+						<!-- Newsletter signup to the upstream project is disabled; the setup script still expects this (unchecked, hidden) element. -->
+						<input type="checkbox" id="newsletter-checkbox" hidden>
 
 						<div class="text-right float-end">
 							<button type="button" class="btn btn-primary btn-outlined tab-next" data-href="#style" @click="switchTab">

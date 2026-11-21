@@ -203,29 +203,17 @@ def setup():
             page = Pages(title=ctf_name, route="index", content="", draft=False)
 
             # Upload banner
-            default_ctf_banner_location = url_for("views.themes", path="img/logo.png")
             ctf_banner = request.files.get("ctf_banner")
             if ctf_banner:
                 f = upload_file(file=ctf_banner, page_id=page.id)
-                default_ctf_banner_location = url_for("views.files", path=f.location)
                 set_config("ctf_banner", f.location)
 
-            # Splice in our banner
-            index = f"""<div class="row">
-    <div class="col-md-6 offset-md-3">
-        <img class="w-100 mx-auto d-block" style="max-width: 500px;padding: 50px;padding-top: 14vh;" src="{default_ctf_banner_location}" />
-        <h3 class="text-center">
-            <p>A cool CTF platform from <a href="https://ctfd.io">ctfd.io</a></p>
-            <p>Follow us on social media:</p>
-            <a href="https://twitter.com/ctfdio"><i class="fab fa-twitter fa-2x" aria-hidden="true"></i></a>&nbsp;
-            <a href="https://facebook.com/ctfdio"><i class="fab fa-facebook fa-2x" aria-hidden="true"></i></a>&nbsp;
-            <a href="https://github.com/ctfd"><i class="fab fa-github fa-2x" aria-hidden="true"></i></a>
-        </h3>
-        <br>
-        <h4 class="text-center">
-            <a href="admin">Click here</a> to login and setup your CTF
-        </h4>
-    </div>
+            # Default ZeroDayCTF landing page
+            index = """<div class="zd-hero">
+    <img class="zd-hero-logo" src="/themes/core/static/img/brand/zerodayctf-logo.png?v=2" alt="ZeroDayCTF">
+    <p class="lead">Hack. Learn. Compete. Solve real-world security challenges and climb the scoreboard.</p>
+    <a class="btn btn-primary btn-lg me-2" href="/register">Register now</a>
+    <a class="btn btn-outline-primary btn-lg" href="/login">Login</a>
 </div>"""
             page.content = index
 

@@ -50,7 +50,7 @@
 	<form method="POST" autocomplete="off" class="w-100">
 		<h5>Email notifications</h5>
 		<small class="form-text text-muted">
-			Customize the emails that ZeroDayCTF sends your users with custom content using <a href="https://docs.ctfd.io/docs/settings/emails/#email-content" target="_blank">predefined variables</a>, mail servers, and addresses.
+			Customize the emails that ZeroDayCTF sends your users with custom content using predefined variables, mail servers, and addresses.
 		</small>
 		<ul class="nav nav-tabs mt-3" role="tablist">
 			<li class="nav-item active">
@@ -87,9 +87,9 @@
 				</div>
 				<div class="form-group">
 					{{ form.mail_server.label() }}
-					<a class="float-right" href="https://docs.ctfd.io/docs/settings/emails#email-server" target="_blank">
+					
 						<i class="far fa-question-circle pr-2"></i>
-					</a>
+					
 					{{ form.mail_server(class="form-control") }}
 					<small class="form-text text-muted">
 						{{ form.mail_server.description }}
