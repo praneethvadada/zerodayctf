@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Option F: Gold Elite | ZeroDayCTF design preview</title>
+<style>
+:root{--bg:#0b0907;--panel:#14110c;--line:#2e2616;--text:#f3ead8;--mute:#a39a86;--g1:#f5c451;--g2:#ff8a3d;--grad:linear-gradient(90deg,#ff8a3d,#f5c451 55%,#ffe29a)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.7 Georgia,"Times New Roman",serif;overflow-x:hidden}
+.sans{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit;text-decoration:none}.wrap{max-width:1100px;margin:0 auto;padding:0 22px}
+#zd-timebar{background:var(--grad);color:#1a1205;text-align:center;padding:.5rem 1rem;font:700 .9rem Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+#zd-timebar .zd-bar-time{margin-left:.6rem;font-variant-numeric:tabular-nums}
+nav{border-bottom:1px solid var(--line);background:rgba(11,9,7,.92);position:sticky;top:0;z-index:20;backdrop-filter:blur(8px)}
+nav .wrap{display:flex;align-items:center;gap:26px;height:72px}.brand{display:flex;align-items:center;gap:10px}.brand .i{height:46px}.brand .w{height:21px}
+.sp{flex:1}nav .l{font:600 .85rem Inter,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}nav .l:hover{color:var(--g1)}
+.btn{display:inline-block;padding:.8rem 1.6rem;font:700 .82rem Inter,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--g1);color:var(--g1);transition:.15s}
+.btn:hover{background:var(--g1);color:#1a1205}.btn.pri{background:var(--grad);border-color:transparent;color:#1a1205}.btn.pri:hover{filter:brightness(1.1)}
+.hero{text-align:center;padding:90px 0 50px}
+.orn{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--g1);font:700 .78rem Inter,system-ui,sans-serif;letter-spacing:.4em;text-transform:uppercase}.orn::before,.orn::after{content:"";width:70px;height:1px;background:var(--g1)}
+h1{font-size:clamp(2.6rem,7vw,5.4rem);line-height:1.02;margin:24px 0 20px;font-weight:700;letter-spacing:-.02em}
+h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic}
+.lead{max-width:640px;margin:0 auto 30px;color:var(--mute);font-size:1.2rem}.cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+#zd-timer-slot{max-width:700px;margin:50px auto 0;padding:26px;border:1px solid var(--line);background:var(--panel);position:relative}
+#zd-timer-slot::before{content:"";position:absolute;inset:6px;border:1px solid rgba(245,196,81,.25);pointer-events:none}
+.zd-timer-label{font:800 .76rem Inter,system-ui,sans-serif;letter-spacing:.34em;text-transform:uppercase;color:var(--g1);margin-bottom:14px}
+.zd-timer-cells{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.zd-timer-cell b{display:block;font-size:clamp(2rem,6vw,3.4rem);font-weight:400;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
+.zd-timer-cell span{font:600 .66rem Inter,system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--g1)}
+.when{margin-top:14px;color:var(--mute);font-size:.98rem;font-style:italic}
+section{padding:84px 0 0}.t{text-align:center;margin-bottom:38px}.t h2{font-size:clamp(1.9rem,4vw,3rem);margin:12px 0 6px;font-weight:700}.t p{margin:0;color:var(--mute);font-style:italic}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line)}
+.pillar{padding:34px 28px;text-align:center;border-right:1px solid var(--line);background:var(--panel);transition:.2s}.pillar:last-child{border-right:0}.pillar:hover{background:#1b160d}
+.pillar b{display:block;font-size:3.4rem;line-height:1;color:transparent;-webkit-text-stroke:1px var(--g1);font-weight:400}.pillar h3{margin:12px 0 6px;font-size:1.4rem}.pillar p{margin:0;color:var(--mute);font-size:.98rem}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.cat{padding:26px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:.2s}.cat:hover{background:var(--panel)}
+.cat h3{margin:0 0 4px;font-size:1.25rem;color:var(--g1)}.cat p{margin:0;color:var(--mute);font-size:.96rem}
+.tl{max-width:760px;margin:0 auto;position:relative;padding-left:34px}.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:1px;background:var(--g1)}
+.ev{position:relative;padding:0 0 34px}.ev::before{content:"";position:absolute;left:-34px;top:8px;width:17px;height:17px;border-radius:50%;background:var(--bg);border:2px solid var(--g1)}
+.ev .time{font:700 1.5rem Georgia,serif;color:var(--g1)}.ev h3{margin:2px 0 4px;font-size:1.3rem}.ev p{margin:0;color:var(--mute)}
+.learn{display:grid;grid-template-columns:160px 1fr;gap:28px;align-items:center;border:1px solid var(--g1);padding:30px;background:linear-gradient(135deg,#14110c,#0f0c08)}
+.plate{background:#fff;padding:14px;display:grid;place-items:center}.plate img{width:100%;max-width:110px;height:auto}.learn h3{margin:0 0 8px;font-size:1.7rem}.learn p{margin:0 0 10px;color:var(--mute)}.learn ul{margin:0 0 18px;padding-left:1.1rem}
+.final{text-align:center;padding:64px 20px;border-top:1px solid var(--g1);border-bottom:1px solid var(--g1)}.final h2{font-size:clamp(1.9rem,4.4vw,3.2rem);margin:0 0 20px;font-weight:700}
+footer{margin-top:70px;padding:28px 0;color:var(--mute);font:.88rem Inter,system-ui,sans-serif}footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media(max-width:860px){.pillars,.cats{grid-template-columns:1fr}.pillar{border-right:0;border-bottom:1px solid var(--line)}.learn{grid-template-columns:1fr}.plate{max-width:170px}nav .l{display:none}}
+html,body{overflow-x:hidden}
+@media(max-width:560px){nav .wrap{gap:10px;padding:0 14px}.brand{gap:8px}.brand .i{height:38px}.brand .w{height:14px}nav .btn:not(.pri){display:none}nav .btn{padding:.55rem .95rem}.hero{padding-top:50px}}
+</style>
+</head>
+<body>
+<div id="zd-timebar" hidden></div>
+<nav><div class="wrap">
+  <a class="brand" href="#"><img class="i" src="logos/gold/icon.png" alt=""><img class="w" src="logos/gold/wordmark.png" alt="ZeroDayCTF"></a>
+  <span class="sp"></span><a class="l" href="#">Rules</a><a class="l" href="#">Challenges</a><a class="btn" href="#">Login</a><a class="btn pri" href="#">Register</a>
+</div></nav>
+<div class="wrap">
+  <header class="hero">
+    <div class="orn">Capture the flag &middot; 2026</div>
+    <h1>Break things.<br><span>Learn how they break.</span></h1>
+    <p class="lead">A capture-the-flag arena of real-world security challenges. Solve puzzles, collect flags, earn points and prove your skills against the best.</p>
+    <div class="cta"><a class="btn pri" href="#">Register now</a><a class="btn" href="#">Login</a></div>
+    <div id="zd-timer-slot"></div>
+    <div class="when">Sunday, 29 November 2026 &middot; 11:00 AM &ndash; 06:00 PM IST</div>
+  </header>
+
+  <section><div class="t"><div class="orn">The arena</div><h2>Three ways to win</h2><p>Hack. Learn. Compete.</p></div>
+    <div class="pillars"><div class="pillar"><b>I</b><h3>Hack</h3><p>Real-world challenges across web, crypto, forensics, reverse engineering, pwn and OSINT.</p></div>
+    <div class="pillar"><b>II</b><h3>Learn</h3><p>Every challenge teaches a real technique. Unlock hints when you are stuck.</p></div>
+    <div class="pillar"><b>III</b><h3>Compete</h3><p>Earn points and watch your rank rise on the live scoreboard.</p></div></div></section>
+
+  <section><div class="t"><div class="orn">Disciplines</div><h2>Pick your battlefield</h2></div>
+    <div class="cats">
+      <div class="cat"><h3>Web</h3><p>SQL injection, XSS, broken auth, SSRF and the OWASP classics.</p></div>
+      <div class="cat"><h3>Crypto</h3><p>Break ciphers, abuse weak randomness, recover secrets.</p></div>
+      <div class="cat"><h3>Forensics</h3><p>Dig through packets, images and memory dumps.</p></div>
+      <div class="cat"><h3>Reverse Engineering</h3><p>Take binaries apart and understand what they do.</p></div>
+      <div class="cat"><h3>Pwn</h3><p>Exploit memory bugs and take control of services.</p></div>
+      <div class="cat"><h3>OSINT</h3><p>Investigate with open-source intelligence.</p></div>
+    </div></section>
+
+  <section><div class="t"><div class="orn">Programme</div><h2>Event day</h2><p>29 November 2026 &middot; all times in IST</p></div>
+    <div class="tl"><div class="ev"><div class="time">11:00 AM</div><h3>Solving begins</h3><p>Hack challenges, capture flags and climb the live scoreboard until 04:00 PM.</p></div>
+    <div class="ev"><div class="time">04:00 PM</div><h3>Writeup window opens</h3><p>Explain each solved challenge with steps and screenshots until 06:00 PM.</p></div>
+    <div class="ev"><div class="time">06:00 PM</div><h3>Event closes</h3><p>Submissions are locked and the results are reviewed.</p></div></div></section>
+
+  <section><div class="learn"><div class="plate"><img src="/themes/core/static/img/brand/ciphercampus-mark.png" alt="CipherCampus logo"></div>
+    <div><div class="sans" style="font-size:.76rem;letter-spacing:.34em;color:var(--g1);font-weight:700">OUR LEARNING PLATFORM</div><h3>Learn on CipherCampus. Practice on real labs.</h3><p>Real hands-on labs and a guided roadmap, from fundamentals to advanced skills.</p>
+    <ul><li>Real hands-on labs, not just theory</li><li>Practice end to end, in a roadmap manner</li><li>Bring the skills to the ZeroDayCTF arena</li></ul><a class="btn" href="#">Start the CipherCampus roadmap &#8599;</a></div></div></section>
+
+  <section><div class="final"><h2>Ready to capture your first flag?</h2><a class="btn pri" href="#">Create your account</a></div></section>
+</div>
+<footer><div class="wrap"><span>&copy; 2026 ZeroDayCTF &mdash; www.zerodayctf.com</span><span>Built by Trivon Software Solutions Private Limited</span></div></footer>
+<script src="/themes/core/static/js/zeroday-timer.js" defer></script>
+</body>
+</html>

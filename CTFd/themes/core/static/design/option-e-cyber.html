@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Option E: Cyber HUD (cyan) | ZeroDayCTF design preview</title>
+<style>
+:root{--bg:#050b14;--panel:#0a1626;--line:#14304d;--text:#dbeafe;--mute:#7f98b5;--c1:#22d3ee;--c2:#3b82f6;--grad:linear-gradient(90deg,#22d3ee,#3b82f6)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden;
+ background-image:radial-gradient(900px 500px at 85% -10%,rgba(34,211,238,.13),transparent 60%),radial-gradient(700px 500px at 0% 10%,rgba(59,130,246,.12),transparent 60%),linear-gradient(rgba(34,211,238,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.035) 1px,transparent 1px);background-size:auto,auto,46px 46px,46px 46px}
+a{color:inherit;text-decoration:none}.wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+nav{position:sticky;top:0;z-index:20;background:rgba(5,11,20,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:22px;height:70px}.brand{display:flex;align-items:center;gap:10px}.brand .i{height:46px}.brand .w{height:21px}
+.sp{flex:1}nav .l{color:var(--mute);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem}nav .l:hover{color:var(--c1)}
+.btn{display:inline-block;padding:.7rem 1.4rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;border:1px solid var(--c1);color:var(--c1);clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);transition:.15s}
+.btn:hover{background:var(--c1);color:#031018}.btn.pri{background:var(--grad);border-color:transparent;color:#031018}.btn.pri:hover{filter:brightness(1.15)}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;padding:70px 0 40px}
+.tag{font-size:.78rem;letter-spacing:.3em;color:var(--c1);text-transform:uppercase;display:flex;align-items:center;gap:10px}.tag::before{content:"";width:34px;height:2px;background:var(--grad)}
+h1{font-size:clamp(2.3rem,5.2vw,4.1rem);line-height:1.05;margin:16px 0 18px;letter-spacing:-.03em;font-weight:800}h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--mute);font-size:1.12rem;max-width:540px;margin:0 0 28px}.cta{display:flex;gap:12px;flex-wrap:wrap}.cta .btn{padding:.9rem 1.8rem}
+.radar{position:relative;width:min(420px,100%);aspect-ratio:1;margin:0 auto}
+.radar .ring{position:absolute;inset:0;border-radius:50%;border:1px solid var(--line)}.radar .r2{inset:14%}.radar .r3{inset:28%}.radar .r4{inset:42%;border-color:rgba(34,211,238,.4)}
+.radar .sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(34,211,238,.38),transparent 28%);animation:spin 5s linear infinite}
+.radar::before,.radar::after{content:"";position:absolute;background:var(--line)}.radar::before{left:50%;top:0;bottom:0;width:1px}.radar::after{top:50%;left:0;right:0;height:1px}
+.blip{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--c1);box-shadow:0 0 14px var(--c1);animation:pulse 2.2s ease-in-out infinite}
+.b1{top:22%;left:64%}.b2{top:60%;left:26%;animation-delay:.7s}.b3{top:70%;left:68%;animation-delay:1.3s}
+.radar .core{position:absolute;inset:38%;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,rgba(34,211,238,.25),rgba(5,11,20,.9) 70%);border:1px solid var(--c1)}
+.radar .core img{width:70%}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{transform:scale(1.8);opacity:.4}}
+.hud{position:relative;background:var(--panel);border:1px solid var(--line);padding:22px}
+.hud::before,.hud::after{content:"";position:absolute;width:16px;height:16px;border:2px solid var(--c1)}.hud::before{top:-1px;left:-1px;border-right:0;border-bottom:0}.hud::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+#zd-timer-slot{margin-top:6px}.zd-timer-label{font-size:.76rem;letter-spacing:.28em;text-transform:uppercase;color:var(--c1);margin-bottom:10px}
+.zd-timer-cells{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.zd-timer-cell{border:1px solid var(--line);background:#07111f;padding:12px 0;text-align:center}
+.zd-timer-cell b{display:block;font-size:clamp(1.6rem,4vw,2.4rem);color:#fff;font-variant-numeric:tabular-nums;text-shadow:0 0 18px rgba(34,211,238,.6);line-height:1.1}.zd-timer-cell span{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);margin-top:34px}.strip div{padding:16px 10px;text-align:center;border:1px solid var(--line);margin-left:-1px;background:rgba(10,22,38,.6)}
+.strip b{display:block;font-size:1.4rem;color:var(--c1)}.strip span{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+section{padding:72px 0 0}.t{margin-bottom:26px}.t small{color:var(--c1);letter-spacing:.3em;font-size:.76rem;text-transform:uppercase}.t h2{margin:6px 0 4px;font-size:clamp(1.7rem,3.4vw,2.4rem);letter-spacing:-.02em}.t p{margin:0;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.cat{position:relative;background:var(--panel);border:1px solid var(--line);padding:22px;transition:.15s}.cat:hover{border-color:var(--c1);box-shadow:0 0 30px rgba(34,211,238,.16);transform:translateY(-4px)}
+.cat .n{color:var(--c2);font-weight:800;font-size:.85rem;letter-spacing:.2em}.cat h3{margin:8px 0 6px;font-size:1.2rem}.cat p{margin:0;color:var(--mute);font-size:.95rem}
+.tl{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:16px}.slot{background:var(--panel);border:1px solid var(--line);padding:24px;position:relative}
+.slot .time{font-size:1.6rem;font-weight:800;color:var(--c1);font-variant-numeric:tabular-nums}.slot h3{margin:6px 0 4px}.slot p{margin:0;color:var(--mute)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.step{background:var(--panel);border:1px solid var(--line);padding:24px}.step b{font-size:2.2rem;color:transparent;-webkit-text-stroke:1px var(--c1)}.step h3{margin:6px 0 4px}.step p{margin:0;color:var(--mute)}
+.learn{display:grid;grid-template-columns:170px 1fr;gap:26px;align-items:center;border:1px solid var(--c2);background:linear-gradient(135deg,#071a3d,#08122b);padding:26px}
+.plate{background:#fff;padding:14px;display:grid;place-items:center}.plate img{width:100%;max-width:120px;height:auto}.learn h3{margin:0 0 8px;font-size:1.5rem}.learn p{margin:0 0 10px;color:#b7c8ea}.learn ul{margin:0 0 16px;padding-left:1.1rem}
+.final{text-align:center;padding:50px 20px;border:1px solid var(--c1);background:radial-gradient(500px 200px at 50% 0,rgba(34,211,238,.18),transparent 70%)}.final h2{margin:0 0 8px;font-size:2rem}
+footer{margin-top:70px;border-top:1px solid var(--line);padding:26px 0;color:var(--mute);font-size:.88rem}footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.grid,.steps{grid-template-columns:1fr 1fr}.tl{grid-template-columns:1fr}.strip{grid-template-columns:1fr 1fr}.learn{grid-template-columns:1fr}.plate{max-width:170px}nav .l{display:none}.radar{width:min(320px,100%)}}
+@media(max-width:560px){.grid,.steps{grid-template-columns:1fr}}
+html,body{overflow-x:hidden}
+@media(max-width:560px){nav .wrap{gap:10px;padding:0 14px}.brand{gap:8px}.brand .i{height:38px}.brand .w{height:14px}nav .btn:not(.pri){display:none}nav .btn{padding:.55rem .95rem}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="brand" href="#"><img class="i" src="logos/cyan/icon.png" alt=""><img class="w" src="logos/cyan/wordmark.png" alt="ZeroDayCTF"></a>
+  <span class="sp"></span><a class="l" href="#">Rules</a><a class="l" href="#">Challenges</a><a class="btn" href="#">Login</a><a class="btn pri" href="#">Register</a>
+</div></nav>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="tag">Capture the flag arena</div>
+      <h1>Break things.<br><span>Learn how they break.</span><br>Rise on the board.</h1>
+      <p class="lead">A capture-the-flag arena of real-world security challenges. Solve puzzles, collect flags, earn points and prove your skills against the best.</p>
+      <div class="cta"><a class="btn pri" href="#">Register now</a><a class="btn" href="#">Login</a></div>
+    </div>
+    <div>
+      <div class="radar"><div class="ring"></div><div class="ring r2"></div><div class="ring r3"></div><div class="ring r4"></div><div class="sweep"></div><span class="blip b1"></span><span class="blip b2"></span><span class="blip b3"></span><div class="core"><img src="logos/cyan/icon.png" alt=""></div></div>
+    </div>
+  </header>
+  <div class="hud"><div id="zd-timer-slot"></div></div>
+  <div class="strip"><div><b>7+</b><span>Categories</span></div><div><b>Live</b><span>Scoreboard</span></div><div><b>Hints</b><span>Unlock when stuck</span></div><div><b>All levels</b><span>Beginner to pro</span></div></div>
+
+  <section><div class="t"><small>// arena</small><h2>Pick your battlefield</h2><p>Challenges across the core domains of security.</p></div>
+    <div class="grid">
+      <div class="cat"><span class="n">01</span><h3>Web</h3><p>SQL injection, XSS, broken auth, SSRF and the OWASP classics.</p></div>
+      <div class="cat"><span class="n">02</span><h3>Crypto</h3><p>Break ciphers, abuse weak randomness, recover secrets.</p></div>
+      <div class="cat"><span class="n">03</span><h3>Forensics</h3><p>Dig through packets, images and memory dumps.</p></div>
+      <div class="cat"><span class="n">04</span><h3>Reverse Engineering</h3><p>Take binaries apart and understand what they do.</p></div>
+      <div class="cat"><span class="n">05</span><h3>Pwn</h3><p>Exploit memory bugs and take control of services.</p></div>
+      <div class="cat"><span class="n">06</span><h3>OSINT</h3><p>Investigate with open-source intelligence.</p></div>
+    </div></section>
+
+  <section><div class="t"><small>// schedule</small><h2>Event day: 29 November 2026</h2><p>All times in IST.</p></div>
+    <div class="tl"><div class="slot"><div class="time">11:00 AM &ndash; 04:00 PM</div><h3>Solve challenges</h3><p>Hack, capture flags and climb the live scoreboard.</p></div><div class="slot"><div class="time">04:00 PM &ndash; 06:00 PM</div><h3>Write your solutions</h3><p>Explain each solved challenge with steps and screenshots.</p></div></div></section>
+
+  <section><div class="t"><small>// process</small><h2>Three steps to the top</h2></div>
+    <div class="steps"><div class="step"><b>01</b><h3>Register</h3><p>Create your account in seconds.</p></div><div class="step"><b>02</b><h3>Solve &amp; capture</h3><p>Find the flag and submit it as ZERODAY{...}.</p></div><div class="step"><b>03</b><h3>Climb the board</h3><p>Earn points and watch your rank rise live.</p></div></div></section>
+
+  <section><div class="learn"><div class="plate"><img src="/themes/core/static/img/brand/ciphercampus-mark.png" alt="CipherCampus logo"></div>
+    <div><div style="font-size:.76rem;letter-spacing:.3em;color:var(--c1)">OUR LEARNING PLATFORM</div><h3>Learn on CipherCampus. Practice on real labs.</h3><p>Real hands-on labs and a guided roadmap, from fundamentals to advanced skills.</p>
+    <ul><li>Real hands-on labs, not just theory</li><li>Practice end to end, in a roadmap manner</li><li>Bring the skills to the ZeroDayCTF arena</li></ul><a class="btn" href="#">Start the CipherCampus roadmap &#8599;</a></div></div></section>
+
+  <section><div class="final"><h2>Ready to capture your first flag?</h2><p style="margin:0 0 18px;color:var(--mute)">Join ZeroDayCTF and start hacking today.</p><a class="btn pri" href="#">Create your account</a></div></section>
+</div>
+<footer><div class="wrap"><span>&copy; 2026 ZeroDayCTF &mdash; www.zerodayctf.com</span><span>Built by Trivon Software Solutions Private Limited</span></div></footer>
+<script src="/themes/core/static/js/zeroday-timer.js" defer></script>
+</body>
+</html>

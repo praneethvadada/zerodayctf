@@ -8,42 +8,44 @@
 <style>
 :root{--bg:#0b0a14;--card:#14121f;--line:#2a2740;--text:#ece9f5;--mute:#a39fb5;--grad:linear-gradient(90deg,#ff4d6a,#c0508f 50%,#7c6cff)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-.wrap{max-width:1180px;margin:0 auto;padding:40px 20px 80px}
+.wrap{max-width:1240px;margin:0 auto;padding:40px 20px 80px}
 h1{font-size:2.2rem;margin:0 0 6px}h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-p.lead{color:var(--mute);max-width:720px;margin:0 0 34px}
+h3.round{margin:40px 0 4px;font-size:1.3rem}p.lead,p.sub{color:var(--mute);max-width:760px;margin:0 0 22px}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
 .shot{position:relative;height:300px;overflow:hidden;border-bottom:1px solid var(--line);background:#000}
-.shot iframe{position:absolute;top:0;left:0;width:1280px;height:960px;border:0;transform:scale(.46);transform-origin:0 0;pointer-events:none}
-.body{padding:20px 22px 24px}.body h2{margin:0 0 6px;font-size:1.35rem}.body p{margin:0 0 14px;color:var(--mute)}
-.body ul{margin:0 0 16px;padding-left:1.1rem;color:#cfcbe0;font-size:.95rem}
+.shot iframe{position:absolute;top:0;left:0;width:1280px;height:960px;border:0;transform:scale(.47);transform-origin:0 0;pointer-events:none}
+.body{padding:18px 22px 24px}.pal{display:inline-block;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:#ffb0c2;border:1px solid var(--line);border-radius:999px;padding:.15rem .7rem;margin-bottom:8px}
+.body h2{margin:0 0 6px;font-size:1.35rem}.body p{margin:0 0 12px;color:var(--mute)}.body ul{margin:0 0 16px;padding-left:1.1rem;color:#cfcbe0;font-size:.95rem}
 .btn{display:inline-block;padding:.65rem 1.3rem;border-radius:10px;font-weight:700;text-decoration:none;color:#fff;background:var(--grad)}
-.btn.o{background:transparent;border:1px solid var(--line);margin-left:8px}
-.note{margin-top:30px;color:var(--mute);font-size:.95rem;border-top:1px solid var(--line);padding-top:18px}
+.note{margin-top:34px;color:var(--mute);font-size:.95rem;border-top:1px solid var(--line);padding-top:18px}
 @media(max-width:860px){.grid{grid-template-columns:1fr}.shot{height:240px}.shot iframe{transform:scale(.36)}}
 </style>
 </head>
 <body><div class="wrap">
 <h1>ZeroDayCTF <span>layout options</span></h1>
-<p class="lead">Four dark designs for the home page. Each one shows the real live countdown, your logo, the schedule, categories, how it works and CipherCampus. Open an option in full, then tell me the letter you like. Once chosen, I'll apply the same style to every page: login, challenges, scoreboard, writeups and the admin panel.</p>
+<p class="lead">Eight dark designs for the home page. Each shows the real live countdown, the schedule, categories, how it works and CipherCampus. Open one in full, then tell me the letter. After you choose, I will apply the same style and colours to every page: login, challenges, scoreboard, writeups, Rules and the admin panel.</p>
+<h3 class="round">Round 1: your current logo colours</h3><p class="sub">Red, purple and indigo, as in your logo.</p>
 <div class="grid">
   <div class="card"><div class="shot"><iframe src="option-a-terminal.html" loading="lazy" title="Option A"></iframe></div>
-    <div class="body"><h2>A &mdash; Terminal</h2><p>Hacker terminal look: black screen, green accents, a typing command window instead of a big logo.</p>
-    <ul><li>Most "hacker" feel, monospace type</li><li>Categories shown as folders</li><li>Great for a technical audience</li></ul>
-    <a class="btn" href="option-a-terminal.html">Open full page</a></div></div>
+    <div class="body"><div class="pal">Original colours</div><h2>A &mdash; Terminal</h2><p>Hacker terminal: black screen, green accents, a typing command window instead of a big logo.</p><ul><li>Most 'hacker' feel, monospace type</li><li>Categories shown as folders</li></ul><a class="btn" href="option-a-terminal.html">Open full page</a></div></div>
   <div class="card"><div class="shot"><iframe src="option-b-neon.html" loading="lazy" title="Option B"></iframe></div>
-    <div class="body"><h2>B &mdash; Neon Glass</h2><p>Deep purple night with glowing brand-colour light and frosted-glass cards.</p>
-    <ul><li>Closest to your logo's red-to-indigo colours</li><li>Big gradient headline, soft glow</li><li>Modern and eye-catching</li></ul>
-    <a class="btn" href="option-b-neon.html">Open full page</a></div></div>
+    <div class="body"><div class="pal">Original colours</div><h2>B &mdash; Neon Glass</h2><p>Deep purple night with glowing red-to-indigo light and frosted-glass cards.</p><ul><li>Closest to your current logo colours</li><li>Big gradient headline, soft glow</li></ul><a class="btn" href="option-b-neon.html">Open full page</a></div></div>
   <div class="card"><div class="shot"><iframe src="option-c-arena.html" loading="lazy" title="Option C"></iframe></div>
-    <div class="body"><h2>C &mdash; Arena</h2><p>Platform-style layout: headline on the left, an "event ticket" with countdown and schedule on the right.</p>
-    <ul><li>Countdown and register button above the fold</li><li>Clean cards, stat strip, charcoal theme</li><li>Feels like a real competition portal</li></ul>
-    <a class="btn" href="option-c-arena.html">Open full page</a></div></div>
+    <div class="body"><div class="pal">Original colours</div><h2>C &mdash; Arena</h2><p>Platform layout: headline left, an 'event ticket' with countdown and schedule right.</p><ul><li>Countdown and Register above the fold</li><li>Feels like a real competition portal</li></ul><a class="btn" href="option-c-arena.html">Open full page</a></div></div>
   <div class="card"><div class="shot"><iframe src="option-d-editorial.html" loading="lazy" title="Option D"></iframe></div>
-    <div class="body"><h2>D &mdash; Editorial</h2><p>Minimal and bold: huge HACK. LEARN. COMPETE. type, thin lines, numbered sections, almost no decoration.</p>
-    <ul><li>Premium, magazine-like look</li><li>Very fast and very clean</li><li>Lets the typography do the work</li></ul>
-    <a class="btn" href="option-d-editorial.html">Open full page</a></div></div>
+    <div class="body"><div class="pal">Original colours</div><h2>D &mdash; Editorial</h2><p>Minimal and bold: huge HACK. LEARN. COMPETE. type, thin lines, numbered sections.</p><ul><li>Premium, magazine-like look</li><li>Very clean and fast</li></ul><a class="btn" href="option-d-editorial.html">Open full page</a></div></div>
 </div>
-<p class="note">These are previews only. Your live site has not changed. You can mix ideas, for example "B colours with C layout", and I'll build that.</p>
-</div></body>
-</html>
+<h3 class="round">Round 2: recoloured logos</h3><p class="sub">The logo itself changes colour to match the page. Cyan, gold, violet and silver versions are ready.</p>
+<div class="grid">
+  <div class="card"><div class="shot"><iframe src="option-e-cyber.html" loading="lazy" title="Option E"></iframe></div>
+    <div class="body"><div class="pal">Logo recoloured: cyan to blue</div><h2>E &mdash; Cyber HUD</h2><p>Futuristic control-room look with an animated radar, corner-bracket panels and glowing numbers.</p><ul><li>Cool, techy, high-contrast</li><li>Animated radar instead of a logo image</li></ul><a class="btn" href="option-e-cyber.html">Open full page</a></div></div>
+  <div class="card"><div class="shot"><iframe src="option-f-gold.html" loading="lazy" title="Option F"></iframe></div>
+    <div class="body"><div class="pal">Logo recoloured: gold</div><h2>F &mdash; Gold Elite</h2><p>Black and gold tournament look: serif headlines, ornamental rules, a vertical event timeline.</p><ul><li>Premium, championship feel</li><li>Countdown banner across the very top</li></ul><a class="btn" href="option-f-gold.html">Open full page</a></div></div>
+  <div class="card"><div class="shot"><iframe src="option-g-bento.html" loading="lazy" title="Option G"></iframe></div>
+    <div class="body"><div class="pal">Logo recoloured: violet to pink</div><h2>G &mdash; Violet Bento</h2><p>Bento-grid dashboard: countdown, schedule, categories and CipherCampus as rounded tiles.</p><ul><li>Everything visible at a glance</li><li>Modern app-style look</li></ul><a class="btn" href="option-g-bento.html">Open full page</a></div></div>
+  <div class="card"><div class="shot"><iframe src="option-h-stealth.html" loading="lazy" title="Option H"></iframe></div>
+    <div class="body"><div class="pal">Logo recoloured: silver + lime accent</div><h2>H &mdash; Mono Stealth</h2><p>Neo-brutalist black and white with acid-lime accents, hard shadows and a scrolling category ticker.</p><ul><li>Bold, loud and different</li><li>Monochrome logo, one accent colour</li></ul><a class="btn" href="option-h-stealth.html">Open full page</a></div></div>
+</div>
+<p class="note">These are previews only. Your live site has not changed. You can mix ideas, for example "G layout with F colours", or ask for another colour (green, red, orange...) and I will build it.</p>
+</div></body></html>

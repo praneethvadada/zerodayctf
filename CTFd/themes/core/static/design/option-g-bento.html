@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Option G: Violet Bento | ZeroDayCTF design preview</title>
+<style>
+:root{--bg:#0d0a14;--tile:#171122;--tile2:#1e1630;--line:#2c2142;--text:#f0eafa;--mute:#a99fc0;--v:#a855f7;--p:#ec4899;--grad:linear-gradient(135deg,#a855f7,#ec4899)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+nav{position:sticky;top:0;z-index:20;background:rgba(13,10,20,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:22px;height:70px}.brand{display:flex;align-items:center;gap:10px}.brand .i{height:46px}.brand .w{height:21px}
+.sp{flex:1}nav .l{color:var(--mute);font-weight:600}nav .l:hover{color:#fff}
+.btn{display:inline-block;padding:.7rem 1.35rem;border-radius:999px;font-weight:700;border:1px solid var(--line);background:var(--tile);color:#fff;transition:.15s}
+.btn.pri{background:var(--grad);border:0;box-shadow:0 10px 28px rgba(236,72,153,.35)}.btn:hover{filter:brightness(1.15)}
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;padding:34px 0 0}
+.tile{background:var(--tile);border:1px solid var(--line);border-radius:26px;padding:26px;position:relative;overflow:hidden;transition:.2s}
+.tile:hover{border-color:#4a3470}
+.hero{grid-column:span 7;grid-row:span 2;display:flex;flex-direction:column;justify-content:center;padding:40px;background:radial-gradient(520px 320px at 0 0,rgba(168,85,247,.3),transparent 70%),radial-gradient(420px 300px at 100% 100%,rgba(236,72,153,.25),transparent 70%),var(--tile)}
+.chip{display:inline-block;padding:.3rem .9rem;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:#f6b4dc;align-self:flex-start}
+h1{font-size:clamp(2.3rem,5vw,4rem);line-height:1.04;margin:18px 0 14px;letter-spacing:-.03em;font-weight:800}h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--mute);font-size:1.1rem;max-width:520px;margin:0 0 24px}.cta{display:flex;gap:12px;flex-wrap:wrap}.cta .btn{padding:.9rem 1.7rem}
+.timer{grid-column:span 5}
+.zd-timer-label{font-size:.76rem;letter-spacing:.24em;text-transform:uppercase;color:#f6b4dc;margin-bottom:12px;font-weight:700}
+.zd-timer-cells{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.zd-timer-cell{background:var(--tile2);border:1px solid var(--line);border-radius:16px;padding:14px 0;text-align:center}
+.zd-timer-cell b{display:block;font-size:clamp(1.6rem,3.4vw,2.2rem);line-height:1.05;font-variant-numeric:tabular-nums}.zd-timer-cell span{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.timer .meta{margin-top:12px;color:var(--mute);font-size:.92rem}
+.sched{grid-column:span 5}.sched h3{margin:0 0 12px;font-size:1.1rem}.row{display:flex;justify-content:space-between;gap:10px;padding:12px 14px;background:var(--tile2);border:1px solid var(--line);border-radius:14px;margin-bottom:8px}.row b{color:#fff}.row span{color:var(--mute);font-variant-numeric:tabular-nums}
+.cats{grid-column:span 8}.cats h3,.steps h3{margin:0 0 14px;font-size:1.1rem}.chips{display:flex;flex-wrap:wrap;gap:10px}.chips div{padding:.8rem 1.1rem;border-radius:16px;background:var(--tile2);border:1px solid var(--line);font-weight:700}
+.chips small{display:block;font-weight:400;color:var(--mute);font-size:.8rem}
+.learn{grid-column:span 4;background:linear-gradient(160deg,#0f2f6e,#2a1a6b);border-color:#34509b}
+.plate{width:84px;background:#fff;border-radius:18px;padding:10px;margin-bottom:12px;display:grid;place-items:center}.plate img{width:100%;height:auto}
+.learn h3{margin:0 0 6px;font-size:1.15rem}.learn p{margin:0 0 12px;color:#c9d4f7;font-size:.94rem}
+.steps{grid-column:span 12;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:0;background:none;border:0}
+.step{background:var(--tile);border:1px solid var(--line);border-radius:26px;padding:26px}.step .n{width:44px;height:44px;border-radius:14px;background:var(--grad);display:grid;place-items:center;font-weight:800;margin-bottom:12px}.step h3{margin:0 0 4px;font-size:1.15rem}.step p{margin:0;color:var(--mute)}
+.final{grid-column:span 12;text-align:center;background:var(--grad);border:0;padding:50px 20px}.final h2{margin:0 0 6px;font-size:2rem}.final .btn{background:#fff;color:#7a1f6b;border:0;margin-top:14px}
+footer{margin-top:50px;border-top:1px solid var(--line);padding:26px 0;color:var(--mute);font-size:.88rem}footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media(max-width:960px){.hero,.timer,.sched,.cats,.learn{grid-column:span 12}.hero{grid-row:auto}.steps{grid-template-columns:1fr}nav .l{display:none}}
+html,body{overflow-x:hidden}
+@media(max-width:560px){nav .wrap{gap:10px;padding:0 14px}.brand{gap:8px}.brand .i{height:38px}.brand .w{height:14px}nav .btn:not(.pri){display:none}nav .btn{padding:.55rem .95rem}.hero{padding:26px}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="brand" href="#"><img class="i" src="logos/violet/icon.png" alt=""><img class="w" src="logos/violet/wordmark.png" alt="ZeroDayCTF"></a>
+  <span class="sp"></span><a class="l" href="#">Rules</a><a class="l" href="#">Challenges</a><a class="btn" href="#">Login</a><a class="btn pri" href="#">Register</a>
+</div></nav>
+<div class="wrap">
+  <div class="bento">
+    <div class="tile hero"><span class="chip">Capture the flag arena</span>
+      <h1>Break things.<br><span>Learn how they break.</span><br>Rise on the board.</h1>
+      <p class="lead">A capture-the-flag arena of real-world security challenges. Solve puzzles, collect flags, earn points and prove your skills against the best.</p>
+      <div class="cta"><a class="btn pri" href="#">Register now</a><a class="btn" href="#">Login</a></div></div>
+    <div class="tile timer"><div id="zd-timer-slot"></div><div class="meta">Sunday, 29 November 2026 &middot; 11:00 AM &ndash; 06:00 PM IST</div></div>
+    <div class="tile sched"><h3>Event day &middot; all times IST</h3><div class="row"><b>Solve challenges</b><span>11:00 AM &ndash; 04:00 PM</span></div><div class="row"><b>Write solutions</b><span>04:00 PM &ndash; 06:00 PM</span></div></div>
+    <div class="tile cats"><h3>Pick your battlefield</h3><div class="chips">
+      <div>Web<small>SQLi, XSS, SSRF</small></div><div>Crypto<small>ciphers, secrets</small></div><div>Forensics<small>packets, images</small></div><div>Reverse<small>binaries</small></div><div>Pwn<small>memory bugs</small></div><div>OSINT<small>open-source intel</small></div></div></div>
+    <div class="tile learn"><div class="plate"><img src="/themes/core/static/img/brand/ciphercampus-mark.png" alt="CipherCampus logo"></div><h3>Learn on CipherCampus</h3><p>Our learning platform with real hands-on labs and a guided roadmap. Practice end to end.</p><a class="btn" style="background:#fff;color:#1a2370;border:0" href="#">Open CipherCampus &#8599;</a></div>
+    <div class="steps"><div class="step"><div class="n">1</div><h3>Register</h3><p>Create your account in seconds.</p></div><div class="step"><div class="n">2</div><h3>Solve &amp; capture</h3><p>Find the flag and submit it as ZERODAY{...}.</p></div><div class="step"><div class="n">3</div><h3>Climb the board</h3><p>Earn points and watch your rank rise live.</p></div></div>
+    <div class="tile final"><h2>Ready to capture your first flag?</h2><p style="margin:0;opacity:.92">Join ZeroDayCTF and start hacking today.</p><a class="btn" href="#">Create your account</a></div>
+  </div>
+</div>
+<footer><div class="wrap"><span>&copy; 2026 ZeroDayCTF &mdash; www.zerodayctf.com</span><span>Built by Trivon Software Solutions Private Limited</span></div></footer>
+<script src="/themes/core/static/js/zeroday-timer.js" defer></script>
+</body>
+</html>
