@@ -1,0 +1,94 @@
+/* ZeroDayCTF brand theme (player / student panel)
+   Palette taken from the ZeroDayCTF logo: red -> purple -> indigo gradient + charcoal. */
+:root,
+[data-bs-theme="light"] {
+  --zd-red: #b8232f;
+  --zd-purple: #5b1a52;
+  --zd-indigo: #1e1566;
+  --zd-ink: #262626;
+  --zd-gradient: linear-gradient(90deg, #b8232f 0%, #5b1a52 55%, #1e1566 100%);
+
+  --bs-primary: #5b1a52;
+  --bs-primary-rgb: 91, 26, 82;
+  --bs-link-color: #5b1a52;
+  --bs-link-color-rgb: 91, 26, 82;
+  --bs-link-hover-color: #b8232f;
+  --bs-link-hover-color-rgb: 184, 35, 47;
+  --bs-body-color: #262626;
+  --bs-body-bg: #ffffff;
+  --bs-border-radius: 0.6rem;
+}
+
+[data-bs-theme="dark"] {
+  --bs-primary: #c0508f;
+  --bs-primary-rgb: 192, 80, 143;
+  --bs-link-color: #e07a9b;
+  --bs-link-color-rgb: 224, 122, 155;
+  --bs-link-hover-color: #ff9bb0;
+  --bs-body-bg: #121018;
+}
+
+body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+/* Navbar: light bar with gradient underline, logo on the left */
+.navbar.fixed-top {
+  background: #fff !important;
+  border-bottom: 3px solid transparent;
+  border-image: var(--zd-gradient) 1;
+  box-shadow: 0 2px 10px rgba(30, 21, 102, 0.08);
+}
+[data-bs-theme="dark"] .navbar.fixed-top { background: #1a1722 !important; }
+.navbar .navbar-brand img { height: 52px; width: auto; }
+.navbar .nav-link { color: var(--zd-ink) !important; font-weight: 600; }
+[data-bs-theme="dark"] .navbar .nav-link { color: #e9e6f0 !important; }
+.navbar .nav-link:hover { color: var(--zd-red) !important; }
+.navbar-toggler-icon { filter: invert(1); }
+[data-bs-theme="dark"] .navbar-toggler-icon { filter: none; }
+
+/* Page headers */
+.jumbotron {
+  background: var(--zd-gradient) !important;
+  color: #fff;
+  border-radius: 0;
+}
+.jumbotron h1, .jumbotron p, .jumbotron a { color: #fff; }
+
+/* Buttons */
+.btn-primary, .btn-outline-primary:hover {
+  background: var(--zd-gradient);
+  border: 0;
+  color: #fff;
+}
+.btn-primary:hover, .btn-primary:focus { filter: brightness(1.12); color: #fff; }
+.btn-outline-primary { color: var(--zd-purple); border-color: var(--zd-purple); }
+.btn-dark { background: var(--zd-ink); border-color: var(--zd-ink); }
+
+/* Cards / challenge tiles */
+.card { border-radius: 0.8rem; border-color: rgba(91, 26, 82, 0.15); }
+.challenge-button { border-radius: 0.7rem !important; }
+.nav-pills .nav-link.active, .nav-tabs .nav-link.active { color: var(--zd-purple); }
+.form-control:focus {
+  border-color: var(--zd-purple);
+  box-shadow: 0 0 0 0.2rem rgba(91, 26, 82, 0.2);
+}
+
+/* Footer */
+.footer {
+  border-top: 3px solid transparent;
+  border-image: var(--zd-gradient) 1;
+  background: #fff;
+  padding: 1.5rem 0;
+  margin-top: 3rem;
+}
+[data-bs-theme="dark"] .footer { background: #1a1722; }
+.footer .zd-built { font-size: 0.85rem; color: #6b6b76; }
+.footer .zd-built a { color: var(--zd-purple); font-weight: 600; text-decoration: none; }
+.footer img.zd-cc { height: 26px; vertical-align: middle; margin-left: 6px; }
+
+/* Landing page */
+.zd-hero { text-align: center; padding: 4rem 1rem 3rem; }
+.zd-hero img.zd-hero-logo { max-width: 460px; width: 80%; }
+.zd-hero h1 { font-weight: 800; margin-top: 1rem; }
+.zd-hero .lead { max-width: 640px; margin: 0.8rem auto 1.6rem; }
+.zd-cards .card { height: 100%; }
+.zd-tag { color: var(--zd-red); font-weight: 700; letter-spacing: 0.2em; }

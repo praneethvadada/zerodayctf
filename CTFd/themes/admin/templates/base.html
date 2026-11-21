@@ -2,14 +2,15 @@
 <html>
 
 <head>
-	<title>Admin Panel</title>
+	<title>Admin Panel | ZeroDayCTF</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="shortcut icon" href="{{ url_for('views.themes', theme='admin', path='img/favicon.ico') }}" type="image/x-icon">
-	<link rel="icon" href="{{ url_for('views.themes', theme='admin', path='img/favicon.ico') }}" type="image/x-icon">
+	<link rel="shortcut icon" href="{{ url_for('views.themes', theme='admin', path='img/brand/favicon.png') }}" type="image/png">
+	<link rel="icon" href="{{ url_for('views.themes', theme='admin', path='img/brand/favicon.png') }}" type="image/png">
 	{{ Assets.css("assets/css/main.scss", theme="admin") }}
 	{{ Assets.css("assets/css/fonts.scss", theme="admin") }}
 	{{ Assets.css("assets/css/admin.scss", theme="admin") }}
+	<link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='admin', path='css/zeroday-admin.css') }}">
 	{{ Assets.css("assets/css/codemirror.scss", theme="admin") }}
 	<script type="text/javascript">
 		var init = {
@@ -40,7 +41,7 @@
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 		<div class="container">
-			<a href="{{ url_for('views.static_html', route='/') }}" class="navbar-brand">CTFd</a>
+			<a href="{{ url_for('views.static_html', route='/') }}" class="navbar-brand"><img src="{{ url_for('views.themes', theme='admin', path='img/brand/zerodayctf-logo.png') }}" alt="ZeroDayCTF"><span class="zd-admin-badge">ADMIN</span></a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#base-navbars"
 					aria-controls="base-navbars" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -108,43 +109,24 @@
 						{% endif %}
 					{% endif %}
 				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li class="nav-item">
-						<a class="nav-link" href="https://docs.ctfd.io/" target="_blank">
-							<i class="far fa-question-circle"></i>
-						</a>
-					</li>
-				</ul>
 			</div>
 		</div>
 	</nav>
 
 	<main role="main">
-		{% if get_config('version_latest') %}
-		<div class="container-fluid bg-warning text-center py-3">
-			<div class="row">
-				<div class="col-md-12">
-					<a class="btn btn-warning" href="{{ get_config('version_latest') }}">
-						A new CTFd version is available!
-					</a>
-				</div>
-			</div>
-		</div>
-		{% endif %}
 		{% block content %}
 		{% endblock %}
 	</main>
 
 	<footer class="footer pt-2">
 		<div class="container text-center">
-			<a href="https://ctfd.io" class="text-secondary">
-				<small class="text-muted">
-					Powered by CTFd
+			<div class="zd-built text-muted">
+				<small>
+					&copy; 2026 ZeroDayCTF &middot; <a href="https://zerodayctf.com">zerodayctf.com</a><br>
+					Built by Trivon Software Solutions Private Limited &middot; Sister platform
+					<a href="https://ciphercampus.com" target="_blank" rel="noopener"><img class="zd-cc" src="{{ url_for('views.themes', theme='admin', path='img/brand/ciphercampus-lockup.png') }}" alt="CipherCampus"></a>
 				</small>
-			</a>
-			<span>
-				<small class="text-muted"><br> Version {{ get_config('ctf_version') }}</small>
-			</span>
+			</div>
 		</div>
 	</footer>
 

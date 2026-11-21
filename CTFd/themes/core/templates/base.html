@@ -4,12 +4,14 @@
   <title>{{ title or Configs.ctf_name }}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="{{ Configs.ctf_small_icon }}" type="image/x-icon">
+  <link rel="shortcut icon" href="{{ url_for('views.themes', theme='core', path='img/brand/favicon.png') }}" type="image/png">
+  <link rel="icon" href="{{ url_for('views.themes', theme='core', path='img/brand/favicon.png') }}" type="image/png">
 
   {{ meta | safe }}
 
   {% block stylesheets %}
     {{ Assets.css("assets/scss/main.scss") }}
+    <link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='core', path='css/zeroday.css') }}">
   {% endblock %}
 
   {{ Plugins.styles }}
@@ -51,11 +53,14 @@
 
 <footer class="footer">
   <div class="container text-center">
-    <a href="https://ctfd.io" class="text-secondary">
-      <small class="text-muted">
-        {% trans %}Powered by CTFd{% endtrans %}
-      </small>
-    </a>
+    <div class="zd-built">
+      &copy; 2026 ZeroDayCTF &middot; <a href="https://zerodayctf.com">zerodayctf.com</a><br>
+      Built by Trivon Software Solutions Private Limited &middot;
+      Sister platform
+      <a href="https://ciphercampus.com" target="_blank" rel="noopener">
+        <img class="zd-cc" src="{{ url_for('views.themes', theme='core', path='img/brand/ciphercampus-lockup.png') }}" alt="CipherCampus">
+      </a>
+    </div>
   </div>
 </footer>
 
