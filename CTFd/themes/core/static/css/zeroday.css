@@ -291,3 +291,11 @@ main h3 { font-weight: 800; letter-spacing: 0.02em; padding-left: 0.9rem; border
 .challenge-button.challenge-solved .challenge-inner span { background: #1f9d55; }
 .challenge-button.challenge-solved .challenge-inner p::after { content: " \2713"; color: #1f9d55; }
 .jumbotron + .container { padding-bottom: 1rem; }
+
+/* CipherCampus block */
+.zd-learn .zd-learn-logo { text-decoration: none; transition: transform 0.15s; }
+.zd-learn .zd-learn-logo:hover { transform: scale(1.04); }
+.zd-checks { list-style: none; padding: 0; margin: 0 0 1.4rem; }
+.zd-checks li { color: #fff; margin-bottom: 0.45rem; font-weight: 600; }
+.zd-checks i { color: #7dffb0; margin-right: 0.5rem; }
+.zd-learn h3, .zd-final h2, .zd-section h3 { border: 0 !important; padding-left: 0 !important; border-image: none !important; }

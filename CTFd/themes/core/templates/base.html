@@ -11,7 +11,7 @@
 
   {% block stylesheets %}
     {{ Assets.css("assets/scss/main.scss") }}
-    <link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='core', path='css/zeroday.css', v=5) }}">
+    <link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='core', path='css/zeroday.css', v=7) }}">
   {% endblock %}
 
   {{ Plugins.styles }}
@@ -80,7 +80,7 @@
         <h6>Our Learning Platform</h6>
         <a class="zd-learn-mini" href="https://ciphercampus.com" target="_blank" rel="noopener">
           <img src="{{ url_for('views.themes', theme='core', path='img/brand/ciphercampus-mark.png', v=5) }}" alt="CipherCampus">
-          <span><strong>CipherCampus</strong><small>Learn cybersecurity from the ground up, then test it here.</small></span>
+          <span><strong>CipherCampus</strong><small>Practice real labs, end to end, on a guided roadmap.</small></span>
         </a>
       </div>
     </div>
