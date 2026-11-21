@@ -5,12 +5,12 @@
 	<title>Admin Panel | ZeroDayCTF</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="shortcut icon" href="{{ url_for('views.themes', theme='admin', path='img/brand/favicon.png') }}" type="image/png">
-	<link rel="icon" href="{{ url_for('views.themes', theme='admin', path='img/brand/favicon.png') }}" type="image/png">
+	<link rel="shortcut icon" href="{{ url_for('views.themes', theme='admin', path='img/brand/favicon.png', v=5) }}" type="image/png">
+	<link rel="icon" href="{{ url_for('views.themes', theme='admin', path='img/brand/favicon.png', v=5) }}" type="image/png">
 	{{ Assets.css("assets/css/main.scss", theme="admin") }}
 	{{ Assets.css("assets/css/fonts.scss", theme="admin") }}
 	{{ Assets.css("assets/css/admin.scss", theme="admin") }}
-	<link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='admin', path='css/zeroday-admin.css') }}">
+	<link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='admin', path='css/zeroday-admin.css', v=5) }}">
 	{{ Assets.css("assets/css/codemirror.scss", theme="admin") }}
 	<script type="text/javascript">
 		var init = {
@@ -41,7 +41,7 @@
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 		<div class="container">
-			<a href="{{ url_for('views.static_html', route='/') }}" class="navbar-brand d-flex align-items-center"><img class="zd-icon" src="{{ url_for('views.themes', theme='admin', path='img/brand/zerodayctf-icon.png') }}" alt=""><img class="zd-word" src="{{ url_for('views.themes', theme='admin', path='img/brand/zerodayctf-wordmark.png') }}" alt="ZeroDayCTF"><span class="zd-admin-badge">ADMIN</span></a>
+			<a href="{{ url_for('views.static_html', route='/') }}" class="navbar-brand d-flex align-items-center"><img class="zd-icon" src="{{ url_for('views.themes', theme='admin', path='img/brand/zerodayctf-icon.png', v=5) }}" alt=""><img class="zd-word" src="{{ url_for('views.themes', theme='admin', path='img/brand/zerodayctf-wordmark.png', v=5) }}" alt="ZeroDayCTF"><span class="zd-admin-badge">ADMIN</span></a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#base-navbars"
 					aria-controls="base-navbars" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -124,7 +124,7 @@
 				<small>
 					&copy; 2026 ZeroDayCTF &middot; <a href="https://zerodayctf.com">zerodayctf.com</a><br>
 					Built by Trivon Software Solutions Private Limited &middot; Sister platform
-					<a href="https://ciphercampus.com" target="_blank" rel="noopener"><img class="zd-cc" src="{{ url_for('views.themes', theme='admin', path='img/brand/ciphercampus-lockup.png') }}" alt="CipherCampus"></a>
+					<a href="https://ciphercampus.com" target="_blank" rel="noopener"><img class="zd-cc" src="{{ url_for('views.themes', theme='admin', path='img/brand/ciphercampus-lockup.png', v=5) }}" alt="CipherCampus"></a>
 				</small>
 			</div>
 		</div>

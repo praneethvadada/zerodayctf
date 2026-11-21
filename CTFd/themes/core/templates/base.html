@@ -4,14 +4,14 @@
   <title>{{ title or Configs.ctf_name }}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="{{ url_for('views.themes', theme='core', path='img/brand/favicon.png') }}" type="image/png">
-  <link rel="icon" href="{{ url_for('views.themes', theme='core', path='img/brand/favicon.png') }}" type="image/png">
+  <link rel="shortcut icon" href="{{ url_for('views.themes', theme='core', path='img/brand/favicon.png', v=5) }}" type="image/png">
+  <link rel="icon" href="{{ url_for('views.themes', theme='core', path='img/brand/favicon.png', v=5) }}" type="image/png">
 
   {{ meta | safe }}
 
   {% block stylesheets %}
     {{ Assets.css("assets/scss/main.scss") }}
-    <link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='core', path='css/zeroday.css') }}">
+    <link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='core', path='css/zeroday.css', v=5) }}">
   {% endblock %}
 
   {{ Plugins.styles }}
@@ -55,8 +55,8 @@
   <div class="container py-5">
     <div class="row g-4">
       <div class="col-lg-4">
-        <img class="zd-foot-logo zd-light-only mb-3" src="{{ url_for('views.themes', theme='core', path='img/brand/zerodayctf-full.png') }}" alt="ZeroDayCTF">
-        <img class="zd-foot-logo zd-dark-only mb-3" src="{{ url_for('views.themes', theme='core', path='img/brand/zerodayctf-full-dark.png') }}" alt="ZeroDayCTF">
+        <img class="zd-foot-logo zd-light-only mb-3" src="{{ url_for('views.themes', theme='core', path='img/brand/zerodayctf-full.png', v=5) }}" alt="ZeroDayCTF">
+        <img class="zd-foot-logo zd-dark-only mb-3" src="{{ url_for('views.themes', theme='core', path='img/brand/zerodayctf-full-dark.png', v=5) }}" alt="ZeroDayCTF">
         <p>Hack. Learn. Compete. A capture-the-flag arena built for curious minds and future security professionals.</p>
       </div>
       <div class="col-6 col-lg-2">
@@ -79,7 +79,7 @@
       <div class="col-lg-4">
         <h6>Our Learning Platform</h6>
         <a class="zd-learn-mini" href="https://ciphercampus.com" target="_blank" rel="noopener">
-          <img src="{{ url_for('views.themes', theme='core', path='img/brand/ciphercampus-mark.png') }}" alt="CipherCampus">
+          <img src="{{ url_for('views.themes', theme='core', path='img/brand/ciphercampus-mark.png', v=5) }}" alt="CipherCampus">
           <span><strong>CipherCampus</strong><small>Learn cybersecurity from the ground up, then test it here.</small></span>
         </a>
       </div>

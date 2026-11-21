@@ -259,22 +259,8 @@ def get_user_agent(req=None):
 
 
 def get_locale():
-    # Use the user's preferred language
-    if authed():
-        user = get_current_user_attrs()
-        if user and user.language:
-            return user.language
-    # Use cookie language
-    cookie_lang = request.cookies.get("language")
-    if cookie_lang and cookie_lang in Languages.values():
-        return cookie_lang
-    # Use the admin's default language
-    default_locale = get_config("default_locale")
-    if default_locale:
-        return default_locale
-    # Detect the user's browser specified language
-    languages = Languages.values()
-    return request.accept_languages.best_match(languages)
+    # ZeroDayCTF is English-only; ignore browser / account / cookie language
+    return "en"
 
 
 def get_current_user_recent_ips():
