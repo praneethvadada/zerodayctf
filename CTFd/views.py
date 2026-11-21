@@ -529,7 +529,7 @@ def themes(theme, path):
             abort(404)
         if os.path.isfile(cand_path):
             # Brand CSS/images are not fingerprinted: always revalidate so edits show up
-            if path.startswith(("css/", "img/brand/", "js/zeroday")):
+            if path.startswith(("css/", "img/brand/", "js/zeroday", "design/")):
                 return send_file(cand_path, max_age=0)
             return send_file(cand_path, max_age=3600)
     abort(404)
@@ -555,7 +555,7 @@ def themes_beta(theme, path):
             abort(404)
         if os.path.isfile(cand_path):
             # Brand CSS/images are not fingerprinted: always revalidate so edits show up
-            if path.startswith(("css/", "img/brand/", "js/zeroday")):
+            if path.startswith(("css/", "img/brand/", "js/zeroday", "design/")):
                 return send_file(cand_path, max_age=0)
             return send_file(cand_path, max_age=3600)
     abort(404)

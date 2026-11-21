@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ZeroDayCTF layout options</title>
+<style>
+:root{--bg:#0b0a14;--card:#14121f;--line:#2a2740;--text:#ece9f5;--mute:#a39fb5;--grad:linear-gradient(90deg,#ff4d6a,#c0508f 50%,#7c6cff)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 20px 80px}
+h1{font-size:2.2rem;margin:0 0 6px}h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+p.lead{color:var(--mute);max-width:720px;margin:0 0 34px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.shot{position:relative;height:300px;overflow:hidden;border-bottom:1px solid var(--line);background:#000}
+.shot iframe{position:absolute;top:0;left:0;width:1280px;height:960px;border:0;transform:scale(.46);transform-origin:0 0;pointer-events:none}
+.body{padding:20px 22px 24px}.body h2{margin:0 0 6px;font-size:1.35rem}.body p{margin:0 0 14px;color:var(--mute)}
+.body ul{margin:0 0 16px;padding-left:1.1rem;color:#cfcbe0;font-size:.95rem}
+.btn{display:inline-block;padding:.65rem 1.3rem;border-radius:10px;font-weight:700;text-decoration:none;color:#fff;background:var(--grad)}
+.btn.o{background:transparent;border:1px solid var(--line);margin-left:8px}
+.note{margin-top:30px;color:var(--mute);font-size:.95rem;border-top:1px solid var(--line);padding-top:18px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}.shot{height:240px}.shot iframe{transform:scale(.36)}}
+</style>
+</head>
+<body><div class="wrap">
+<h1>ZeroDayCTF <span>layout options</span></h1>
+<p class="lead">Four dark designs for the home page. Each one shows the real live countdown, your logo, the schedule, categories, how it works and CipherCampus. Open an option in full, then tell me the letter you like. Once chosen, I'll apply the same style to every page: login, challenges, scoreboard, writeups and the admin panel.</p>
+<div class="grid">
+  <div class="card"><div class="shot"><iframe src="option-a-terminal.html" loading="lazy" title="Option A"></iframe></div>
+    <div class="body"><h2>A &mdash; Terminal</h2><p>Hacker terminal look: black screen, green accents, a typing command window instead of a big logo.</p>
+    <ul><li>Most "hacker" feel, monospace type</li><li>Categories shown as folders</li><li>Great for a technical audience</li></ul>
+    <a class="btn" href="option-a-terminal.html">Open full page</a></div></div>
+  <div class="card"><div class="shot"><iframe src="option-b-neon.html" loading="lazy" title="Option B"></iframe></div>
+    <div class="body"><h2>B &mdash; Neon Glass</h2><p>Deep purple night with glowing brand-colour light and frosted-glass cards.</p>
+    <ul><li>Closest to your logo's red-to-indigo colours</li><li>Big gradient headline, soft glow</li><li>Modern and eye-catching</li></ul>
+    <a class="btn" href="option-b-neon.html">Open full page</a></div></div>
+  <div class="card"><div class="shot"><iframe src="option-c-arena.html" loading="lazy" title="Option C"></iframe></div>
+    <div class="body"><h2>C &mdash; Arena</h2><p>Platform-style layout: headline on the left, an "event ticket" with countdown and schedule on the right.</p>
+    <ul><li>Countdown and register button above the fold</li><li>Clean cards, stat strip, charcoal theme</li><li>Feels like a real competition portal</li></ul>
+    <a class="btn" href="option-c-arena.html">Open full page</a></div></div>
+  <div class="card"><div class="shot"><iframe src="option-d-editorial.html" loading="lazy" title="Option D"></iframe></div>
+    <div class="body"><h2>D &mdash; Editorial</h2><p>Minimal and bold: huge HACK. LEARN. COMPETE. type, thin lines, numbered sections, almost no decoration.</p>
+    <ul><li>Premium, magazine-like look</li><li>Very fast and very clean</li><li>Lets the typography do the work</li></ul>
+    <a class="btn" href="option-d-editorial.html">Open full page</a></div></div>
+</div>
+<p class="note">These are previews only. Your live site has not changed. You can mix ideas, for example "B colours with C layout", and I'll build that.</p>
+</div></body>
+</html>
