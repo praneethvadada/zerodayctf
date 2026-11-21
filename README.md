@@ -6,12 +6,12 @@
 
 ## What is ZerodayCTF?
 
-ZerodayCTF is a self-hosted CTF platform where players solve security challenges, submit flags, and compete on a live scoreboard, as individual (solo) participants. Organizers manage everything (challenges, users, scoring, content, schedule) from a built-in admin panel.
+ZerodayCTF is a self-hosted CTF platform where players solve security challenges, submit flags, and compete on a live scoreboard. Organizers manage everything (challenges, users, scoring, content, schedule) from a built-in admin panel.
 
 ## Features
 
 **For players**
-- Register and log in as an individual, or create and join teams
+- Register and log in with your own account
 - Browse challenges by category, download files, unlock hints
 - Submit flags with brute-force protection and attempt limits
 - Live scoreboard, score graphs, and public profile pages
