@@ -56,3 +56,16 @@ a:hover { color: var(--zd-red); }
 }
 .footer .zd-built a { color: var(--zd-purple); font-weight: 600; }
 .footer img.zd-cc { height: 24px; vertical-align: middle; margin-left: 6px; }
+
+/* brand: icon + wordmark */
+.navbar .navbar-brand .zd-icon { height: 46px; width: auto; margin-right: 10px; }
+.navbar .navbar-brand .zd-word { height: 20px; width: auto; }
+.navbar .navbar-brand img { height: auto; }
+.navbar .navbar-brand .zd-icon { height: 46px; }
+.navbar .navbar-brand .zd-word { height: 20px; }
+
+/* Keep the long admin menu on one line without clipping */
+.navbar > .container { max-width: 1500px; }
+.navbar .nav-link { white-space: nowrap; padding-left: 0.5rem; padding-right: 0.5rem; font-size: 0.9rem; }
+.navbar .navbar-brand { margin-right: 0.8rem; }
+@media (min-width: 768px) and (max-width: 1399px) { .navbar .navbar-brand .zd-word { display: none; } }

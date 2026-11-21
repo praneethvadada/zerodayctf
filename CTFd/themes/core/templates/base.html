@@ -51,15 +51,44 @@
 
 {% include "components/snackbar.html" %}
 
-<footer class="footer">
-  <div class="container text-center">
-    <div class="zd-built">
-      &copy; 2026 ZeroDayCTF &middot; <a href="https://zerodayctf.com">zerodayctf.com</a><br>
-      Built by Trivon Software Solutions Private Limited &middot;
-      Sister platform
-      <a href="https://ciphercampus.com" target="_blank" rel="noopener">
-        <img class="zd-cc" src="{{ url_for('views.themes', theme='core', path='img/brand/ciphercampus-lockup.png') }}" alt="CipherCampus">
-      </a>
+<footer class="zd-footer">
+  <div class="container py-5">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <img class="zd-foot-logo zd-light-only mb-3" src="{{ url_for('views.themes', theme='core', path='img/brand/zerodayctf-full.png') }}" alt="ZeroDayCTF">
+        <img class="zd-foot-logo zd-dark-only mb-3" src="{{ url_for('views.themes', theme='core', path='img/brand/zerodayctf-full-dark.png') }}" alt="ZeroDayCTF">
+        <p>Hack. Learn. Compete. A capture-the-flag arena built for curious minds and future security professionals.</p>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h6>Platform</h6>
+        <ul>
+          <li><a href="{{ url_for('challenges.listing') }}">Challenges</a></li>
+          <li><a href="{{ url_for('scoreboard.listing') }}">Scoreboard</a></li>
+          <li><a href="{{ url_for('users.listing') }}">Players</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h6>Account</h6>
+        <ul>
+          <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+          <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+          <li><a href="{{ url_for('views.tos') }}">Terms</a></li>
+          <li><a href="{{ url_for('views.privacy') }}">Privacy</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4">
+        <h6>Our Learning Platform</h6>
+        <a class="zd-learn-mini" href="https://ciphercampus.com" target="_blank" rel="noopener">
+          <img src="{{ url_for('views.themes', theme='core', path='img/brand/ciphercampus-mark.png') }}" alt="CipherCampus">
+          <span><strong>CipherCampus</strong><small>Learn cybersecurity from the ground up, then test it here.</small></span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="zd-bottom py-3">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-1">
+      <span>&copy; 2026 ZeroDayCTF &middot; <a href="https://zerodayctf.com">zerodayctf.com</a></span>
+      <span>Built by <strong>Trivon Software Solutions Private Limited</strong></span>
     </div>
   </div>
 </footer>

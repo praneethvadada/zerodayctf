@@ -1,7 +1,10 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   <div class="container">
-    <a href="{{ url_for('views.static_html', route='/') }}" class="navbar-brand">
-      <img src="{{ url_for('views.themes', theme='core', path='img/brand/zerodayctf-logo.png') }}" alt="ZeroDayCTF">
+    <a href="{{ url_for('views.static_html', route='/') }}" class="navbar-brand zd-brand">
+      <img class="zd-icon zd-light-only" src="{{ url_for('views.themes', theme='core', path='img/brand/zerodayctf-icon.png') }}" alt="">
+      <img class="zd-icon zd-dark-only" src="{{ url_for('views.themes', theme='core', path='img/brand/zerodayctf-icon-dark.png') }}" alt="">
+      <img class="zd-word zd-light-only" src="{{ url_for('views.themes', theme='core', path='img/brand/zerodayctf-wordmark.png') }}" alt="ZeroDayCTF">
+      <img class="zd-word zd-dark-only" src="{{ url_for('views.themes', theme='core', path='img/brand/zerodayctf-wordmark-dark.png') }}" alt="ZeroDayCTF">
     </a>
 
     <button
