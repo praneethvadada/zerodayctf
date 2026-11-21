@@ -47,8 +47,12 @@
   function barHTML(p) {
     if (!p.target) return "<strong>" + p.label + "</strong>";
     var c = cells(p.target - now() / 1000);
+    var link = "";
+    if (p.key === "writeup" && window.init && window.init.userName) {
+      link = " <a class=\"zd-bar-link\" href=\"/writeups\">Submit your writeup &rarr;</a>";
+    }
     return "<strong>" + p.label + "</strong> <span class=\"zd-bar-time\">" +
-      c[0][1] + "d " + pad(c[1][1]) + "h " + pad(c[2][1]) + "m " + pad(c[3][1]) + "s</span>";
+      c[0][1] + "d " + pad(c[1][1]) + "h " + pad(c[2][1]) + "m " + pad(c[3][1]) + "s</span>" + link;
   }
 
   function render() {

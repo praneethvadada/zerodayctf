@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron text-center">
+  <div class="container">
+    <h1>Writeup</h1>
+    <p class="mb-0">Explain how you solved each challenge</p>
+  </div>
+</div>
+
+<div class="container zd-writeups">
+  {% if message %}
+    <div class="alert alert-{{ message_kind }}" role="alert">{{ message }}</div>
+  {% endif %}
+
+  {% if phase == 'writeup' %}
+    <div class="zd-callout">
+      <strong>Writeup window is open: 04:00 PM &ndash; 06:00 PM IST.</strong>
+      For every challenge you solved, write the steps you followed and upload screenshots that show your work. Changes are saved when you press <em>Save</em>, and you can edit until 06:00 PM.
+    </div>
+  {% elif phase == 'over' %}
+    <div class="zd-callout">
+      <strong>The writeup window has closed.</strong> Your saved writeups are shown below and can no longer be edited.
+    </div>
+  {% else %}
+    <div class="zd-callout">
+      <strong>The writeup window opens at 04:00 PM IST</strong>, after the solving phase ends, and closes at 06:00 PM IST. Come back then to write your steps and upload screenshots for each challenge you solved.
+    </div>
+  {% endif %}
+
+  {% if total == 0 %}
+    <div class="card p-4 text-center">
+      <h4>No solved challenges yet</h4>
+      <p class="mb-3">Solve at least one challenge to write it up.</p>
+      <div><a class="btn btn-primary" href="{{ url_for('challenges.listing') }}">Go to challenges</a></div>
+    </div>
+  {% else %}
+    <div class="zd-wprogress">
+      <div class="d-flex justify-content-between mb-1">
+        <strong>Progress</strong>
+        <span>{{ done }} of {{ total }} challenges explained</span>
+      </div>
+      <div class="progress" style="height: 12px;">
+        <div class="progress-bar" role="progressbar" style="width: {{ (done * 100 / total) | round | int }}%; background: var(--zd-gradient);"></div>
+      </div>
+      <small class="text-muted d-block mt-1">A challenge counts as explained when you write at least {{ min_text }} characters of steps and add at least one screenshot.</small>
+    </div>
+
+    {% for item in items %}
+      {% set c = item.challenge %}
+      <div class="card zd-wcard" id="chal-{{ c.id }}">
+        <div class="zd-whead">
+          <div>
+            <span class="zd-wcat">{{ c.category }}</span>
+            <h4 class="mb-0">{{ c.name }}</h4>
+          </div>
+          <div class="text-end">
+            {% if item.complete %}
+              <span class="badge zd-ok">Explained</span>
+            {% else %}
+              <span class="badge zd-todo">
+                {% if (item.content | trim | length) < min_text and not item.files %}Needs steps and screenshot
+                {% elif (item.content | trim | length) < min_text %}Needs more steps
+                {% else %}Needs a screenshot{% endif %}
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+        <form method="post" action="{{ url_for('writeups.save_writeup', challenge_id=c.id) }}" enctype="multipart/form-data">
+          <input type="hidden" name="nonce" value="{{ Session.nonce }}">
+          <label class="form-label fw-bold" for="content-{{ c.id }}">Your steps</label>
+          <textarea id="content-{{ c.id }}" name="content" rows="8" class="form-control" maxlength="{{ max_text }}"
+            {% if not can_edit %}readonly{% endif %}
+            placeholder="Step 1: What did you notice first?&#10;Step 2: Which tool or technique did you use, and why?&#10;Step 3: How did you get the flag?">{{ item.content }}</textarea>
+
+          <label class="form-label fw-bold mt-3">Screenshots ({{ item.files | length }}/{{ max_images }})</label>
+          {% if item.files %}
+            <div class="zd-shots">
+              {% for f in item.files %}
+                <div class="zd-shot">
+                  <a href="{{ url_for('writeups.view_file', file_id=f.id) }}" target="_blank" rel="noopener">
+                    <img src="{{ url_for('writeups.view_file', file_id=f.id) }}" alt="{{ f.filename }}" loading="lazy">
+                  </a>
+                  <small class="d-block text-truncate">{{ f.filename }}</small>
+                  {% if can_edit %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger w-100" formaction="{{ url_for('writeups.delete_file', challenge_id=c.id, file_id=f.id) }}" formnovalidate onclick="return confirm('Remove this screenshot?');">Remove</button>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          {% elif not can_edit %}
+            <p class="text-muted">No screenshots uploaded.</p>
+          {% endif %}
+
+          {% if can_edit %}
+            <input class="form-control mt-2" type="file" name="screenshots" multiple accept="image/png,image/jpeg,image/gif,image/webp">
+            <small class="text-muted">PNG, JPG, GIF or WEBP, up to 8 MB each.</small>
+            <div class="mt-3 text-end">
+              <button type="submit" class="btn btn-primary">Save writeup</button>
+            </div>
+          {% endif %}
+        </form>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+{% endblock %}

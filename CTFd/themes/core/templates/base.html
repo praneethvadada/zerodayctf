@@ -11,7 +11,7 @@
 
   {% block stylesheets %}
     {{ Assets.css("assets/scss/main.scss") }}
-    <link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='core', path='css/zeroday.css', v=9) }}">
+    <link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='core', path='css/zeroday.css', v=10) }}">
   {% endblock %}
 
   {{ Plugins.styles }}
@@ -63,9 +63,12 @@
       <div class="col-6 col-lg-2">
         <h6>Platform</h6>
         <ul>
+          <li><a href="/rules">Rules</a></li>
           <li><a href="{{ url_for('challenges.listing') }}">Challenges</a></li>
+          {% if authed() %}
           <li><a href="{{ url_for('scoreboard.listing') }}">Scoreboard</a></li>
           <li><a href="{{ url_for('users.listing') }}">Players</a></li>
+          {% endif %}
         </ul>
       </div>
       <div class="col-6 col-lg-2">
@@ -100,7 +103,7 @@
   {{ Assets.js("assets/js/page.js") }}
 {% endblock %}
 
-<script src="{{ url_for('views.themes_beta', theme='core', path='js/zeroday-timer.js', v=1) }}" defer></script>
+<script src="{{ url_for('views.themes_beta', theme='core', path='js/zeroday-timer.js', v=3) }}" defer></script>
 
 {{ Plugins.scripts }}
 

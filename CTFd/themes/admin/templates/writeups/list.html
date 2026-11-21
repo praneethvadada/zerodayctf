@@ -1,0 +1,50 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1>Writeups</h1>
+	</div>
+</div>
+
+<div class="container">
+	<p class="text-muted">
+		Participants with at least one solved challenge must explain every solve (steps + screenshots).
+		Current phase: <strong>{{ phase }}</strong>. Participants with solves: <strong>{{ total_participants }}</strong>.
+	</p>
+	<div class="mb-3">
+		<a class="btn btn-sm {% if not only_missing %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{{ url_for('writeups_admin.listing') }}">All participants</a>
+		<a class="btn btn-sm {% if only_missing %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{{ url_for('writeups_admin.listing', filter='missing') }}">Incomplete only</a>
+	</div>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>User</th>
+				<th>Solved</th>
+				<th>Explained</th>
+				<th>Status</th>
+				<th>Last saved (UTC)</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for r in rows %}
+			<tr>
+				<td>{{ r.user.name }}</td>
+				<td>{{ r.solved }}</td>
+				<td>{{ r.done }}</td>
+				<td>
+					{% if r.complete %}<span class="badge badge-success">Complete</span>
+					{% elif r.done == 0 %}<span class="badge badge-danger">Not started</span>
+					{% else %}<span class="badge badge-warning">Partial</span>{% endif %}
+				</td>
+				<td>{{ r.last.strftime('%Y-%m-%d %H:%M') if r.last else '-' }}</td>
+				<td><a href="{{ url_for('writeups_admin.detail', user_id=r.user.id) }}">Review</a></td>
+			</tr>
+			{% else %}
+			<tr><td colspan="6" class="text-center text-muted">Nothing to show.</td></tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
