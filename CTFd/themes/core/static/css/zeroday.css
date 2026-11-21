@@ -299,3 +299,45 @@ main h3 { font-weight: 800; letter-spacing: 0.02em; padding-left: 0.9rem; border
 .zd-checks li { color: #fff; margin-bottom: 0.45rem; font-weight: 600; }
 .zd-checks i { color: #7dffb0; margin-right: 0.5rem; }
 .zd-learn h3, .zd-final h2, .zd-section h3 { border: 0 !important; padding-left: 0 !important; border-image: none !important; }
+
+/* ---------- Live countdown ---------- */
+.zd-timebar {
+  background: var(--zd-gradient); color: #fff; text-align: center;
+  padding: 0.45rem 1rem; font-size: 0.92rem; letter-spacing: 0.02em;
+}
+.zd-timebar[data-phase="solve"] { background: linear-gradient(90deg, #167a45, #1e1566); }
+.zd-timebar[data-phase="over"] { background: #444; }
+.zd-timebar .zd-bar-time { font-variant-numeric: tabular-nums; font-weight: 800; margin-left: 0.4rem; }
+
+.zd-timer-card {
+  max-width: 760px; margin: 2rem auto 0; padding: 1.6rem 1.2rem; border-radius: 1.2rem;
+  background: var(--zd-surface); border: 1px solid var(--zd-border); box-shadow: var(--zd-shadow);
+}
+.zd-timer-label { text-transform: uppercase; letter-spacing: 0.22em; font-weight: 800; font-size: 0.8rem; color: var(--zd-red); margin-bottom: 0.9rem; }
+[data-bs-theme="dark"] .zd-timer-label { color: #ff8da1; }
+.zd-timer-cells { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; max-width: 520px; margin: 0 auto; }
+.zd-timer-cell { background: var(--zd-gradient-diag); color: #fff; border-radius: 0.9rem; padding: 0.9rem 0.2rem; box-shadow: 0 8px 18px rgba(91, 26, 82, 0.3); }
+.zd-timer-cell b { display: block; font-size: clamp(1.6rem, 5vw, 2.6rem); line-height: 1; font-variant-numeric: tabular-nums; font-weight: 800; }
+.zd-timer-cell span { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.85; }
+.zd-timer-meta { color: var(--zd-muted); margin-top: 1rem; font-size: 0.95rem; }
+
+/* ---------- Schedule timeline ---------- */
+.zd-timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.zd-slot { position: relative; padding: 1.6rem; border-radius: 1.1rem; background: var(--zd-surface); border: 1px solid var(--zd-border); box-shadow: var(--zd-shadow); text-align: center; }
+.zd-slot .zd-time { font-size: 1.35rem; font-weight: 800; background: var(--zd-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+[data-bs-theme="dark"] .zd-slot .zd-time { background: linear-gradient(90deg, #ff6b7d, #8f7cff); -webkit-background-clip: text; background-clip: text; }
+.zd-slot h5 { font-weight: 800; margin: 0.5rem 0 0.3rem; }
+.zd-slot p { color: var(--zd-muted); margin: 0; font-size: 0.95rem; }
+.zd-slot .zd-pill { display: inline-block; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.2rem 0.7rem; border-radius: 999px; color: #fff; background: var(--zd-gradient); }
+@media (max-width: 767px) { .zd-timeline { grid-template-columns: 1fr; } }
+
+/* ---------- Rules page ---------- */
+.zd-rules { max-width: 900px; margin: 0 auto; }
+.zd-rules h2 { font-weight: 800; margin-top: 2.2rem; padding-left: 0.9rem; border-left: 6px solid transparent; border-image: linear-gradient(180deg, #b8232f, #1e1566) 1; }
+.zd-rules ol, .zd-rules ul { padding-left: 1.3rem; }
+.zd-rules li { margin-bottom: 0.55rem; }
+.zd-rules .zd-callout { background: var(--zd-surface-2); border: 1px solid var(--zd-border); border-left: 5px solid var(--zd-red); border-radius: 0.8rem; padding: 1rem 1.2rem; margin: 1.2rem 0; }
+
+/* Navbar is taller than the stock theme assumes: keep content clear of it */
+main[role="main"] { padding-top: 79px; }
+@media (max-width: 767px) { main[role="main"] { padding-top: 66px; } }

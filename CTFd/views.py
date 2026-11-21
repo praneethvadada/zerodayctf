@@ -529,7 +529,7 @@ def themes(theme, path):
             abort(404)
         if os.path.isfile(cand_path):
             # Brand CSS/images are not fingerprinted: always revalidate so edits show up
-            if path.startswith(("css/", "img/brand/")):
+            if path.startswith(("css/", "img/brand/", "js/zeroday")):
                 return send_file(cand_path, max_age=0)
             return send_file(cand_path, max_age=3600)
     abort(404)
@@ -555,10 +555,37 @@ def themes_beta(theme, path):
             abort(404)
         if os.path.isfile(cand_path):
             # Brand CSS/images are not fingerprinted: always revalidate so edits show up
-            if path.startswith(("css/", "img/brand/")):
+            if path.startswith(("css/", "img/brand/", "js/zeroday")):
                 return send_file(cand_path, max_age=0)
             return send_file(cand_path, max_age=3600)
     abort(404)
+
+
+@views.route("/server-time")
+def server_time():
+    """
+    Authoritative clock + event schedule for the countdown timer.
+    The browser only ticks locally between syncs; every value comes from the server.
+    """
+    import json
+    import time
+
+    def as_int(key):
+        try:
+            return int(get_config(key))
+        except (TypeError, ValueError):
+            return None
+
+    payload = {
+        "now": time.time(),
+        "start": as_int("start"),
+        "end": as_int("end"),
+        "writeup_end": as_int("writeup_end"),
+    }
+    r = make_response(json.dumps(payload), 200)
+    r.mimetype = "application/json"
+    r.headers["Cache-Control"] = "no-store"
+    return r
 
 
 @views.route("/healthcheck")

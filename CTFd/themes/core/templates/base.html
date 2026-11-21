@@ -11,7 +11,7 @@
 
   {% block stylesheets %}
     {{ Assets.css("assets/scss/main.scss") }}
-    <link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='core', path='css/zeroday.css', v=7) }}">
+    <link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='core', path='css/zeroday.css', v=9) }}">
   {% endblock %}
 
   {{ Plugins.styles }}
@@ -45,6 +45,7 @@
 {% include "components/navbar.html" %}
 
 <main role="main">
+  <div id="zd-timebar" class="zd-timebar" hidden></div>
   {% block content %}
   {% endblock %}
 </main>
@@ -98,6 +99,8 @@
 {% block scripts %}
   {{ Assets.js("assets/js/page.js") }}
 {% endblock %}
+
+<script src="{{ url_for('views.themes_beta', theme='core', path='js/zeroday-timer.js', v=1) }}" defer></script>
 
 {{ Plugins.scripts }}
 
