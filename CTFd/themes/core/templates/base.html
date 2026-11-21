@@ -1,11 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>{{ title or Configs.ctf_name }}</title>
+  {%- set zd_path = (request.path.rstrip('/') or '/') -%}
+  {%- set zd_pages = {
+    '/': ['ZeroDayCTF | Solo Capture The Flag (CTF) Cybersecurity Competition',
+          'Join ZeroDayCTF, a solo capture-the-flag cybersecurity competition. Solve real-world hacking challenges, learn practical skills and climb the live scoreboard.'],
+    '/rules': ['Rules | ZeroDayCTF',
+          'Official rules, schedule and fair-play guidelines for the ZeroDayCTF solo capture-the-flag cybersecurity competition.'],
+    '/register': ['Register | ZeroDayCTF',
+          'Create your ZeroDayCTF account and take part in the solo capture-the-flag cybersecurity competition.'],
+    '/login': ['Login | ZeroDayCTF', 'Log in to your ZeroDayCTF account.'],
+    '/challenges': ['Challenges | ZeroDayCTF', 'ZeroDayCTF challenges.'],
+    '/scoreboard': ['Scoreboard | ZeroDayCTF', 'ZeroDayCTF live scoreboard.'],
+    '/users': ['Players | ZeroDayCTF', 'ZeroDayCTF players.'],
+    '/settings': ['Settings | ZeroDayCTF', 'Your ZeroDayCTF account settings.'],
+    '/notifications': ['Notifications | ZeroDayCTF', 'ZeroDayCTF announcements.'],
+    '/writeups': ['Writeup | ZeroDayCTF', 'Submit your ZeroDayCTF solution writeups.']
+  } -%}
+  {%- set zd_page = zd_pages.get(zd_path) -%}
+  {%- set zd_title = zd_page[0] if zd_page else ((title ~ ' | ZeroDayCTF') if (title and title != 'ZeroDayCTF') else 'ZeroDayCTF') -%}
+  {%- set zd_desc = zd_page[1] if zd_page else zd_pages['/'][1] -%}
+  {%- set zd_public = zd_path in ['/', '/rules', '/register'] -%}
+  {%- set zd_url = 'https://www.zerodayctf.com' ~ (zd_path if zd_path != '/' else '/') -%}
+  {%- set zd_img = 'https://www.zerodayctf.com/themes/core/static/img/brand/og-image.png' -%}
+  <title>{{ zd_title }}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="{{ url_for('views.themes', theme='core', path='img/brand/favicon.png', v=5) }}" type="image/png">
-  <link rel="icon" href="{{ url_for('views.themes', theme='core', path='img/brand/favicon.png', v=5) }}" type="image/png">
+  <meta name="description" content="{{ zd_desc }}">
+  <meta name="robots" content="{{ 'index, follow, max-image-preview:large' if zd_public else 'noindex, nofollow' }}">
+  <meta name="author" content="Trivon Software Solutions Private Limited">
+  <meta name="application-name" content="ZeroDayCTF">
+  <meta name="theme-color" content="#5b1a52">
+  <link rel="canonical" href="{{ zd_url }}">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('views.themes', theme='core', path='img/brand/favicon-32.png', v=1) }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('views.themes', theme='core', path='img/brand/favicon-16.png', v=1) }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ZeroDayCTF">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="{{ zd_title }}">
+  <meta property="og:description" content="{{ zd_desc }}">
+  <meta property="og:url" content="{{ zd_url }}">
+  <meta property="og:image" content="{{ zd_img }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ZeroDayCTF logo: a hooded hacker with a flag. Hack, learn, compete.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ zd_title }}">
+  <meta name="twitter:description" content="{{ zd_desc }}">
+  <meta name="twitter:image" content="{{ zd_img }}">
+  {% if zd_path == '/' and zd_jsonld is defined %}{{ zd_jsonld() }}{% endif %}
 
   {{ meta | safe }}
 
