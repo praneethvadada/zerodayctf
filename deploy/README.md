@@ -163,8 +163,20 @@ Put that same password in `DATABASE_URL` in `.env`, then test the connection (sh
 
 ## 4. DNS and HTTPS
 
-At your domain registrar / DNS provider create two **A records** to the Elastic IP:
-`zerodayctf.com` and `www.zerodayctf.com` (TTL 300). Check: `dig +short www.zerodayctf.com`.
+At your domain registrar / DNS provider create these **A records**, all to the Elastic IP (TTL 300):
+
+| Type | Name | Purpose |
+| --- | --- | --- |
+| A | `@` | zerodayctf.com (redirects to www) |
+| A | `www` | www.zerodayctf.com (the site) |
+| A | `admin` | admin.zerodayctf.com (opens the admin panel) |
+| A | `www.admin` | optional: redirects to admin.zerodayctf.com |
+
+Delete any CNAME/AAAA records for the same names. Check: `dig +short www.zerodayctf.com admin.zerodayctf.com`.
+`init-certs.sh` puts every name that resolves into one certificate; run it again later to add a name.
+`admin.zerodayctf.com` is the same application: `/` goes to `/admin`, search engines are told not to index it.
+Sessions are per host, so sign in separately on admin.zerodayctf.com. Optional hardening (commented example in
+`conf/nginx/https.conf`): return 404 for `/admin` on the www host once the admin host works.
 
 ```bash
 ./deploy/init-certs.sh you@example.com --staging    # optional dry run
