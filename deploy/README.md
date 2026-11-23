@@ -41,7 +41,7 @@ connection costs about 0.15 MB in total, so 10,000 connected players need roughl
 | `WORKERS` | `32` on the 16xlarge (or `12` on a 4xlarge) |
 | RDS | `db.m7g.xlarge`, **Multi-AZ**, 50 GB gp3 with autoscaling, 14-day backups |
 | Pool settings | `SQLALCHEMY_POOL_SIZE=6`, `SQLALCHEMY_MAX_OVERFLOW=4` (32 workers x 10 = 320 connections, far below the 1,360 allowed) |
-| Rate limits | `RATELIMIT_LOGIN=60,5`, `RATELIMIT_REGISTER=60,5`, `RATELIMIT_EVENTS=5000,60` |
+| Rate limits | `RATELIMIT_LOGIN=2000,5`, `RATELIMIT_REGISTER=2000,5`, `RATELIMIT_EVENTS=5000,60` |
 
 The busiest moment is the first minutes (everyone registers, logs in and opens the board at once): 5,000 players
 is roughly 1,500-2,000 requests/s for about 30 seconds. After that it drops to a few hundred requests/s.
@@ -228,6 +228,46 @@ RDS CPU in CloudWatch and `docker stats` while it runs. Then delete the test acc
 ```
 
 Tested locally with 300 simulated players: 117 requests/s, no errors, p95 about 0.5 s.
+
+---
+
+## 7c. What happens when 1,000 students press Login in the same second?
+
+Measured with `scripts/login_burst.py`: 1,000 browsers, each with the login page already open, all sending the login
+at the same instant (all from one IP address, like a college network).
+
+* **The server accepts all 1,000 at once and none crash or time out.** But finishing them takes time, because every
+  login runs a deliberately slow password check: **about 0.19 s of CPU per login**, so one app worker completes
+  about **4-5 logins per second**.
+* **Measured (6 workers):** all 1,000 logged in successfully, **25 logins/s**, the last one after **40 s**
+  (median wait 23 s).
+* **Rate limit:** limits are counted per IP. With the old template value `RATELIMIT_LOGIN=60,5` only **195 of 1,000** got
+  in and **805 were refused immediately** (they would have to retry). Use `RATELIMIT_LOGIN=2000,5` for the event.
+
+| `WORKERS` | logins per second | all 1,000 done after | all 5,000 done after |
+| --- | --- | --- | --- |
+| 6 (measured) | 25 | 40 s | 3.3 min |
+| 12 | ~50 | ~20 s | ~100 s |
+| 32 | ~135 | ~7.5 s | ~37 s |
+| 48 | ~200 | ~5 s | ~25 s |
+
+(Larger rows are projections from the measured per-worker speed; real EC2 cores may be a little faster.)
+
+**So: no server can finish 1,000 password logins in one second, but a 32-48 worker setup clears the whole rush in 5-8 seconds,
+and nothing breaks.** Ways to make it painless:
+* Open registration **a few days before** the event. A login lasts **7 days**, so on event day most students are already logged in.
+* Tell students to log in a few minutes early (before 11:00).
+* The home page, Rules, scoreboard and countdown do not use the database or passwords, so they stay fast during the rush.
+* Raising the limit lets one IP try passwords faster, but each guess still costs 0.19 s of CPU, which caps an attacker at roughly
+  the same ~135-200 tries/s, and passwords must be 8+ characters. After the first rush you can lower it again (edit `.env`, then `./deploy/compose.sh up -d`).
+
+Reproduce it yourself (creates and removes test accounts):
+
+```bash
+./deploy/compose.sh exec -T -e PYTHONPATH=/opt/CTFd ctfd python scripts/login_burst.py create 1000
+./deploy/compose.sh exec -T ctfd python scripts/login_burst.py fire 1000 --base http://nginx
+./deploy/compose.sh exec -T -e PYTHONPATH=/opt/CTFd ctfd python scripts/loadtest_cleanup.py
+```
 
 ---
 
