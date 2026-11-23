@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="zd-wrap" style="padding-top:48px;padding-bottom:24px">
+  <header style="text-align:center;max-width:860px;margin:0 auto">
+    <div class="zd-tag" style="display:inline-block">ZeroDayCTF &middot; 29 November 2026</div>
+    <h1 style="font-size:clamp(2.2rem,6vw,4rem);font-weight:800;letter-spacing:-0.03em;margin:14px 0 8px;border:0;padding:0">The arena opens soon.</h1>
+    <p class="zd-lead" style="font-size:1.15rem;text-align:center;margin-left:auto;margin-right:auto">
+      {% if user_name %}You are in, <b>{{ user_name }}</b>. {% endif %}The challenges unlock the moment the clock reaches zero. Nothing to refresh: this page and your countdown stay in sync with the server.
+    </p>
+  </header>
+
+  <div class="zd-hud" style="max-width:760px;margin:28px auto 0">
+    <div id="zd-timer-slot"></div>
+    <div class="zd-timer-meta" style="text-align:center">Doors open at 11:00 AM IST (UTC+05:30)</div>
+  </div>
+
+  <section class="zd-sec" style="padding-top:56px">
+    <div class="zd-st" style="text-align:center"><small>// event day</small><h2>How the day runs</h2></div>
+    <div class="zd-tl">
+      <div class="zd-slot"><div class="zd-time">11:00 AM &ndash; 04:00 PM</div><h3>Solve challenges</h3><p>Hack, capture flags and climb the live scoreboard.</p></div>
+      <div class="zd-slot"><div class="zd-time">04:00 PM &ndash; 06:00 PM</div><h3>Write your solutions</h3><p>Explain every challenge you solved, with steps and screenshots. Required for everyone who solves one.</p></div>
+    </div>
+  </section>
+
+  <section class="zd-sec" style="padding-top:48px">
+    <div class="zd-st" style="text-align:center"><small>// get ready</small><h2>Be ready before 11:00</h2></div>
+    <div class="zd-steps">
+      <div class="zd-step"><b>01</b><h3>Read the rules</h3><p>Know what is allowed. <a href="/rules">Open the rules</a>.</p></div>
+      <div class="zd-step"><b>02</b><h3>Set up your machine</h3><p>Charged laptop, stable internet, your favourite tools and a notes app for screenshots.</p></div>
+      <div class="zd-step"><b>03</b><h3>Sign in early</h3><p>Log in a few minutes before the start so you can jump straight in.</p></div>
+    </div>
+    <div style="text-align:center;margin-top:28px">
+      <a class="btn btn-primary btn-lg me-2" href="/rules">Read the rules</a>
+      {% if not user_name %}<a class="btn btn-outline-primary btn-lg" href="{{ url_for('auth.login') }}">Login</a>{% endif %}
+    </div>
+  </section>
+
+  <section class="zd-sec" style="padding-top:48px">
+    <div class="zd-learn-mini" style="max-width:640px;margin:0 auto">
+      <img src="/themes/core/static/img/brand/ciphercampus-mark.png?v=8" alt="CipherCampus logo" loading="lazy">
+      <div><b>Warm up while you wait</b><small>Practice real hands-on labs on <a href="https://ciphercampus.com" target="_blank" rel="noopener">CipherCampus</a>.</small></div>
+    </div>
+  </section>
+</div>
+{% endblock %}

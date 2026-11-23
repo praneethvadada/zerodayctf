@@ -38,7 +38,11 @@ def listing():
         infos.append(_l("Challenge Visibility is set to Admins Only"))
 
     if ctf_started() is False:
-        errors.append(_l("%(ctf_name)s has not started yet", ctf_name=Configs.ctf_name))
+        # only admins get here (everyone else sees the "arena opens soon" page)
+        infos.append(
+            "ADMIN PREVIEW: the event has not started. Students currently see the 'arena opens soon' page "
+            "with the countdown. This is the board exactly as they will see it on event day."
+        )
 
     if ctf_paused() is True:
         infos.append(_l("%(ctf_name)s is paused", ctf_name=Configs.ctf_name))

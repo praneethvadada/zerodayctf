@@ -1,6 +1,6 @@
 import functools
 
-from flask import abort, current_app, jsonify, redirect, request, url_for
+from flask import abort, current_app, jsonify, redirect, render_template, request, url_for
 from flask_babel import gettext
 
 from CTFd.cache import cache
@@ -35,6 +35,12 @@ def during_ctf_time_only(f):
                 if is_teams_mode() and get_current_team() is None:
                     return redirect(url_for("teams.private", next=request.full_path))
                 else:
+                    if not request.path.startswith("/api/") and request.method == "GET":
+                        # people see a proper "arena opens soon" page with the countdown, not a bare error
+                        user = get_current_user()
+                        return render_template(
+                            "coming_soon.html", user_name=user.name if user else None
+                        )
                     error = gettext(
                         "%(ctf_name)s has not started yet", ctf_name=config.ctf_name()
                     )
