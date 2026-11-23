@@ -53,6 +53,12 @@ fi
 
 echo "==> Starting the stack"
 ./deploy/compose.sh up -d --build
+# nginx may be crash-looping from an earlier start without a certificate: restart it now that one exists
+./deploy/compose.sh restart nginx
+sleep 3
+if [ -z "$(./deploy/compose.sh ps --status running --services | grep -x nginx)" ]; then
+  echo "nginx is not running; see: ./deploy/compose.sh logs --tail 30 nginx"; exit 1
+fi
 
 if [ "$SELF_ONLY" -eq 1 ]; then echo "Self-signed certificate in place (local testing)."; exit 0; fi
 
