@@ -1,0 +1,33 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container"><h1>Students</h1></div>
+</div>
+<div class="container">
+	<form method="get" class="form-inline mb-3">
+		<input class="form-control mr-2" name="q" value="{{ q }}" placeholder="Search name, username, email, roll number">
+		<button class="btn btn-primary mr-2">Search</button>
+		<a class="btn btn-outline-secondary" href="{{ url_for('registration_admin.students_csv') }}">Download CSV</a>
+	</form>
+	<p class="text-muted">Roll number, branch and college can only be changed here, not by students. Showing up to 500 newest.</p>
+	<table class="table table-striped">
+		<thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Roll no</th><th>College</th><th>Branch</th><th></th></tr></thead>
+		<tbody>
+		{% for u, p, c in rows %}
+		<tr>
+			<td>{{ p.full_name if p else '' }}</td>
+			<td>{{ u.name }}</td>
+			<td>{{ u.email }}</td>
+			<td>{{ p.roll_no if p else '' }}</td>
+			<td>{{ c.name if c else '' }}{% if c and not c.approved %} <span class="badge badge-warning">pending</span>{% endif %}</td>
+			<td>{{ p.branch if p else '' }}</td>
+			<td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('registration_admin.student_edit', user_id=u.id) }}">Edit</a></td>
+		</tr>
+		{% else %}
+		<tr><td colspan="7" class="text-muted">No students found.</td></tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

@@ -3,9 +3,7 @@
 {% block content %}
   <div class="jumbotron">
     <div class="container">
-      <h1>
-        {% trans %}Register{% endtrans %}
-      </h1>
+      <h1>{% trans %}Register{% endtrans %}</h1>
     </div>
   </div>
 
@@ -14,79 +12,100 @@
       <div class="col-md-6 offset-md-3">
         {% include "components/errors.html" %}
 
-        {% if integrations.mlc() %}
-          <a class="btn btn-secondary btn-lg btn-block w-100" href="{{ url_for('auth.oauth_login') }}">
-            Login with Major League Cyber
-          </a>
+        <form method="post" accept-charset="utf-8" role="form" autocomplete="on" id="zd-register">
+          <input type="hidden" name="nonce" value="{{ Session.nonce }}">
 
-          <hr>
-        {% endif %}
+          <div class="mb-3">
+            <b><label class="form-label" for="full_name">Name</label> <span class="text-danger">*</span></b>
+            <input class="form-control" id="full_name" name="full_name" type="text" value="{{ form.full_name }}" maxlength="100" autocomplete="name" required>
+            <small class="form-text text-muted">Your full name as in your college records</small>
+          </div>
 
-        {% with form = Forms.auth.RegistrationForm() %}
+          <div class="mb-3">
+            <b><label class="form-label" for="name">Username</label> <span class="text-danger">*</span></b>
+            <input class="form-control" id="name" name="name" type="text" value="{{ form.name }}" maxlength="80" autocomplete="username" required>
+            <small class="form-text text-muted">Shown on the site</small>
+          </div>
 
-          {% from "macros/forms.html" import render_extra_fields %}
+          <div class="mb-3">
+            <b><label class="form-label" for="email">Email</label> <span class="text-danger">*</span></b>
+            <input class="form-control" id="email" name="email" type="email" value="{{ form.email }}" autocomplete="email" required>
+            <small class="form-text text-muted">We send a verification code to this address. Never shown to the public.</small>
+          </div>
 
-          <form method="post" accept-charset="utf-8" role="form">
+          <div class="mb-3">
+            <b><label class="form-label" for="password">Password</label> <span class="text-danger">*</span></b>
+            <input class="form-control" id="password" name="password" type="password" autocomplete="new-password" required>
+          </div>
 
-            <div class="mb-3">
-              <b>
-                {{ form.name.label(class="form-label") }}
-                <span class="text-danger">*</span>
-              </b>
-              {{ form.name(class="form-control", value=name, autocomplete="username") }}
-              <small class="form-text text-muted">
-                {% trans %}Your username on the site{% endtrans %}
-              </small>
+          <div class="mb-3">
+            <b><label class="form-label" for="confirm_password">Confirm password</label> <span class="text-danger">*</span></b>
+            <input class="form-control" id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required>
+          </div>
+
+          <div class="mb-3">
+            <b><label class="form-label" for="college">College</label> <span class="text-danger">*</span></b>
+            <select class="form-select form-control" id="college" name="college" required>
+              <option value="">Select your college</option>
+              {% for c in colleges %}
+                <option value="{{ c.id }}" {% if form.college == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+              {% endfor %}
+              <option value="{{ other }}" {% if form.college == other %}selected{% endif %}>Other (my college is not listed)</option>
+            </select>
+          </div>
+
+          <div class="mb-3" id="other-wrap" style="display:none">
+            <b><label class="form-label" for="other_college">College name</label> <span class="text-danger">*</span></b>
+            <input class="form-control zd-upper" id="other_college" name="other_college" type="text" value="{{ form.other_college }}" maxlength="120" autocomplete="off">
+            <small class="form-text text-muted">Capital letters and digits. An admin will review this college.</small>
+          </div>
+
+          <div class="mb-3">
+            <b><label class="form-label" for="branch">Branch</label> <span class="text-danger">*</span></b>
+            <input class="form-control zd-upper" id="branch" name="branch" type="text" value="{{ form.branch }}" maxlength="120" autocomplete="off" placeholder="CSE" required>
+          </div>
+
+          <div class="mb-3">
+            <b><label class="form-label" for="roll_no">Roll number</label> <span class="text-danger">*</span></b>
+            <input class="form-control zd-roll" id="roll_no" name="roll_no" type="text" value="{{ form.roll_no }}" maxlength="30" autocomplete="off" required>
+            <small class="form-text text-muted">Letters and digits only. You cannot change it later, so check it carefully.</small>
+          </div>
+
+          <div class="row pt-3">
+            <div class="col-12 col-md-5 offset-md-7">
+              <button type="submit" class="btn btn-block btn-primary w-100">Send verification code</button>
             </div>
-
-            <div class="mb-3">
-              <b>
-                {{ form.email.label(class="form-label") }}
-                <span class="text-danger">*</span>
-              </b>
-              {{ form.email(class="form-control", value=email, autocomplete="email") }}
-              <small class="form-text text-muted">
-                {% trans %}Never shown to the public{% endtrans %}
-              </small>
-            </div>
-
-            <div class="mb-3">
-              <b>
-                {{ form.password.label(class="form-label") }}
-                <span class="text-danger">*</span>
-              </b>
-              {{ form.password(class="form-control", value=password, autocomplete="new-password") }}
-              <small class="form-text text-muted">
-                {% trans %}Password used to log into your account{% endtrans %}
-              </small>
-            </div>
-
-            {{ form.nonce() }}
-
-            {{ render_extra_fields(form.extra) }}
-
+          </div>
+          {% if Configs.tos_or_privacy %}
             <div class="row pt-3">
-              <div class="col-6 col-md-4 offset-6 offset-md-8">
-                {{ form.submit(class="btn btn-block btn-primary w-100") }}
+              <div class="col-md-12 text-center">
+                <small class="text-muted text-center">
+                  {% trans trimmed privacy_link=Configs.privacy_link, tos_link=Configs.tos_link %}
+                  By registering, you agree to the
+                  <a href="{{ privacy_link }}" target="_blank">privacy policy</a>
+                  and <a href="{{ tos_link }}" target="_blank">terms of service</a>
+                  {% endtrans %}
+                </small>
               </div>
             </div>
-
-            {% if Configs.tos_or_privacy %}
-              <div class="row pt-3">
-                <div class="col-md-12 text-center">
-                  <small class="text-muted text-center">
-                    {% trans trimmed privacy_link=Configs.privacy_link, tos_link=Configs.tos_link %}
-                    By registering, you agree to the
-                    <a href="{{ privacy_link }}" target="_blank">privacy policy</a>
-                    and <a href="{{ tos_link }}" target="_blank">terms of service</a>
-                    {% endtrans %}
-                  </small>
-                </div>
-              </div>
-            {% endif %}
-          </form>
-        {% endwith %}
+          {% endif %}
+        </form>
       </div>
     </div>
   </div>
+
+  <script>
+    (function () {
+      var sel = document.getElementById("college"), wrap = document.getElementById("other-wrap"), other = document.getElementById("other_college");
+      function toggle() { var on = sel.value === "{{ other }}"; wrap.style.display = on ? "" : "none"; other.required = on; }
+      sel.addEventListener("change", toggle); toggle();
+      // capital letters and digits only, typed or pasted
+      document.querySelectorAll(".zd-upper").forEach(function (el) {
+        el.addEventListener("input", function () { el.value = el.value.toUpperCase().replace(/[^A-Z0-9 .&()\/\-]/g, ""); });
+      });
+      document.querySelectorAll(".zd-roll").forEach(function (el) {
+        el.addEventListener("input", function () { el.value = el.value.toUpperCase().replace(/[^A-Z0-9]/g, ""); });
+      });
+    })();
+  </script>
 {% endblock %}

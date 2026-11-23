@@ -1,0 +1,79 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container"><h1>Colleges</h1></div>
+</div>
+<div class="container">
+	{% for m in msgs %}<div class="alert alert-info">{{ m }}</div>{% endfor %}
+
+	<p class="text-muted">Students choose their college from the approved list below. A student who picks "Other" adds a pending college that must be approved here before it appears for others.</p>
+
+	{% if pending %}
+	<h4>Waiting for approval ({{ pending|length }})</h4>
+	<table class="table table-striped">
+		<thead><tr><th>Name</th><th>Students</th><th>Actions</th></tr></thead>
+		<tbody>
+		{% for c in pending %}
+		<tr>
+			<td>
+				<form method="post" class="form-inline">
+					<input type="hidden" name="nonce" value="{{ Session.nonce }}"><input type="hidden" name="id" value="{{ c.id }}">
+					<input class="form-control form-control-sm mr-2" name="name" value="{{ c.name }}" style="min-width:260px">
+					<button class="btn btn-sm btn-outline-secondary" name="action" value="rename">Rename</button>
+				</form>
+			</td>
+			<td>{{ counts.get(c.id, 0) }}</td>
+			<td>
+				<form method="post" class="form-inline">
+					<input type="hidden" name="nonce" value="{{ Session.nonce }}"><input type="hidden" name="id" value="{{ c.id }}">
+					<button class="btn btn-sm btn-success mr-2" name="action" value="approve">Approve</button>
+					<select class="form-control form-control-sm mr-1" name="target">
+						{% for a in approved %}<option value="{{ a.id }}">{{ a.name }}</option>{% endfor %}
+					</select>
+					<button class="btn btn-sm btn-outline-primary mr-2" name="action" value="merge" title="Move these students to the selected college and remove this one">Merge into</button>
+				</form>
+			</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	{% endif %}
+
+	<h4 class="mt-4">Add colleges</h4>
+	<form method="post">
+		<input type="hidden" name="nonce" value="{{ Session.nonce }}"><input type="hidden" name="action" value="add">
+		<textarea class="form-control mb-2" name="names" rows="5" placeholder="One college per line (saved in capital letters)"></textarea>
+		<button class="btn btn-primary">Add</button>
+	</form>
+
+	<h4 class="mt-4">Approved colleges ({{ approved|length }})</h4>
+	<table class="table table-striped">
+		<thead><tr><th>Name</th><th>Students</th><th></th></tr></thead>
+		<tbody>
+		{% for c in approved %}
+		<tr>
+			<td>
+				<form method="post" class="form-inline">
+					<input type="hidden" name="nonce" value="{{ Session.nonce }}"><input type="hidden" name="id" value="{{ c.id }}">
+					<input class="form-control form-control-sm mr-2" name="name" value="{{ c.name }}" style="min-width:260px">
+					<button class="btn btn-sm btn-outline-secondary" name="action" value="rename">Rename</button>
+				</form>
+			</td>
+			<td>{{ counts.get(c.id, 0) }}</td>
+			<td>
+				{% if not counts.get(c.id, 0) %}
+				<form method="post" onsubmit="return confirm('Delete this college?');">
+					<input type="hidden" name="nonce" value="{{ Session.nonce }}"><input type="hidden" name="id" value="{{ c.id }}">
+					<button class="btn btn-sm btn-outline-danger" name="action" value="delete">Delete</button>
+				</form>
+				{% endif %}
+			</td>
+		</tr>
+		{% else %}
+		<tr><td colspan="3" class="text-muted">No colleges yet. Add some above.</td></tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

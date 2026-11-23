@@ -19,6 +19,14 @@ services:
       # every app worker keeps at most POOL_SIZE + MAX_OVERFLOW database connections: WORKERS x 10 must stay below the database max_connections
       - SQLALCHEMY_POOL_SIZE=${SQLALCHEMY_POOL_SIZE:-6}
       - SQLALCHEMY_MAX_OVERFLOW=${SQLALCHEMY_MAX_OVERFLOW:-4}
+      # e-mail (OTP codes). Leave OTP_SMTP_HOST empty in development; set OTP_DEV_PRINT=1 to print codes in the log instead
+      - OTP_SMTP_HOST=${OTP_SMTP_HOST:-}
+      - OTP_SMTP_PORT=${OTP_SMTP_PORT:-465}
+      - OTP_SMTP_USER=${OTP_SMTP_USER:-}
+      - OTP_SMTP_PASSWORD=${OTP_SMTP_PASSWORD:-}
+      - OTP_SMTP_SSL=${OTP_SMTP_SSL:-true}
+      - OTP_FROM=${OTP_FROM:-}
+      - OTP_DEV_PRINT=${OTP_DEV_PRINT:-}
       - SESSION_COOKIE_SECURE=${SESSION_COOKIE_SECURE:-false}
       - LOG_FOLDER=/var/log/CTFd
       - ACCESS_LOG=-

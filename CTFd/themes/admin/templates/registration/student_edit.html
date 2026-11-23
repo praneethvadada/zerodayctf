@@ -1,0 +1,25 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container"><h1>Edit {{ user.name }}</h1></div>
+</div>
+<div class="container">
+	{% for e in errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+	<form method="post" style="max-width:520px">
+		<input type="hidden" name="nonce" value="{{ Session.nonce }}">
+		<div class="form-group"><label>Name</label>
+			<input class="form-control" name="full_name" value="{{ prof.full_name if prof else '' }}" required></div>
+		<div class="form-group"><label>Roll number (capital letters and digits)</label>
+			<input class="form-control" name="roll_no" value="{{ prof.roll_no if prof else '' }}" required></div>
+		<div class="form-group"><label>Branch</label>
+			<input class="form-control" name="branch" value="{{ prof.branch if prof else '' }}" required></div>
+		<div class="form-group"><label>College</label>
+			<select class="form-control" name="college" required>
+				{% for c in colleges %}<option value="{{ c.id }}" {% if prof and prof.college_id == c.id %}selected{% endif %}>{{ c.name }}{% if not c.approved %} (pending){% endif %}</option>{% endfor %}
+			</select></div>
+		<button class="btn btn-primary">Save</button>
+		<a class="btn btn-link" href="{{ url_for('registration_admin.students') }}">Cancel</a>
+	</form>
+</div>
+{% endblock %}
