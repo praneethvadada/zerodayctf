@@ -3,7 +3,7 @@
 #   docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.rds.yml up -d --build
 #
 # Requires DATABASE_URL in .env, for example:
-#   DATABASE_URL=mysql+pymysql://ctfd:PASSWORD@zerodayctf.xxxxxx.ap-south-1.rds.amazonaws.com:3306/ctfd?ssl_ca=/etc/ssl/rds/global-bundle.pem&ssl_verify_cert=true&ssl_verify_identity=true
+#   DATABASE_URL=mysql+pymysql://ctfd:PASSWORD@zerodayctf.xxxxxx.ap-south-1.rds.amazonaws.com:3306/ctfd?ssl_ca=/etc/ssl/rds/global-bundle.pem
 services:
   ctfd:
     volumes:

@@ -338,6 +338,7 @@ The bigger instance only needs to run for the event day. Set `WORKERS` to about 
 | --- | --- |
 | `502 Bad Gateway` | App not healthy yet: `./deploy/compose.sh logs --tail 100 ctfd` |
 | App cannot reach the database | RDS security group must allow 3306 from the EC2 security group; wrong endpoint/password in `DATABASE_URL`; run `scripts/db_check.py` |
+| `CERTIFICATE_VERIFY_FAILED ... unable to get local issuer certificate` even though `rds-tls-test.sh` says OK | `DATABASE_URL` contains `ssl_verify_cert` / `ssl_verify_identity`: remove them and keep only `?ssl_ca=/etc/ssl/rds/global-bundle.pem` (proven with a local TLS database), then rebuild |
 | `CERTIFICATE_VERIFY_FAILED ... unable to get local issuer certificate` | the CA bundle does not verify your database: run `./deploy/rds-tls-test.sh`, then `./deploy/fetch-rds-ca.sh <region>` (region bundle) |
 | `Host '...' is blocked because of many connection errors` | MariaDB blocks a server after too many failed connects, and even good logins are refused. Reboot the RDS instance (Actions > Reboot, no failover) or run `FLUSH HOSTS;` from another host, and set `max_connect_errors` = `1000000` in the parameter group |
 | Certificate request fails | DNS not pointing at the Elastic IP yet, or port 80 blocked in the EC2 security group |
