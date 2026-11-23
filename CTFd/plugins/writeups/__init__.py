@@ -333,7 +333,24 @@ def detail(user_id):
     return render_template("admin/writeups/detail.html", user=user, items=items)
 
 
+def _registration_gate():
+    """Registration opens at the time stored in config 'registration_start' (unix seconds, 0 or unset = always open)."""
+    if request.endpoint != "auth.register":
+        return None
+    from CTFd.utils import get_config
+    from CTFd.utils.user import is_admin
+    import time as _time
+    try:
+        opens = int(get_config("registration_start") or 0)
+    except (TypeError, ValueError):
+        opens = 0
+    if opens and _time.time() < opens and not is_admin():
+        abort(403, description="Registrations are not open yet. They open on 24 November 2026 (00:00 IST). Please come back then.")
+    return None
+
+
 def load(app):
     app.db.create_all()
+    app.before_request(_registration_gate)
     app.register_blueprint(writeups_bp)
     app.register_blueprint(admin_bp)

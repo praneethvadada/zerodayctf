@@ -28,6 +28,8 @@ SCHEDULE = {
     "start": int(os.environ.get("SEED_START", 1795930200)),
     "end": int(os.environ.get("SEED_END", 1795948200)),
     "writeup_end": int(os.environ.get("SEED_WRITEUP_END", 1795955400)),
+    # registrations open 24 Nov 2026 00:00 IST
+    "registration_start": int(os.environ.get("SEED_REGISTRATION_START", 1795458600)),
 }
 
 SETTINGS = {
