@@ -90,6 +90,7 @@ RDS > **Create database** > **Standard create**
 **Parameter group** (create a custom one, family `mariadb10.11`, and attach it):
 `character_set_server`, `character_set_database`, `character_set_client`, `character_set_connection`, `character_set_results`
 = `utf8mb4`; `collation_server`, `collation_connection` = `utf8mb4_unicode_ci`. Optionally `require_secure_transport` = `1`.
+Also set `max_connect_errors` = `1000000` so a few failed connection attempts can never get the app server blocked.
 
 **Security group rule** (RDS > the database > Connectivity > security group > Inbound rules):
 Type `MySQL/Aurora` (3306), **Source = your EC2 instance's security group** (not "0.0.0.0/0").
@@ -137,6 +138,18 @@ CREATE USER 'ctfd'@'%' IDENTIFIED BY 'A_LONG_RANDOM_PASSWORD_LETTERS_AND_DIGITS'
 GRANT ALL PRIVILEGES ON ctfd.* TO 'ctfd'@'%';
 FLUSH PRIVILEGES;
 EXIT;
+```
+
+If `SHOW DATABASES;` does not list `ctfd` (the "initial database name" was left empty when creating RDS), create it:
+
+```sql
+CREATE DATABASE ctfd CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+Check that the certificate bundle works for your database **before** starting the app (no password needed):
+
+```bash
+./deploy/rds-tls-test.sh        # if only the region bundle says "Verify return code: 0 (ok)":  ./deploy/fetch-rds-ca.sh <your-region>
 ```
 
 Put that same password in `DATABASE_URL` in `.env`, then test the connection (should say TLS encrypted, utf8mb4):
@@ -325,6 +338,8 @@ The bigger instance only needs to run for the event day. Set `WORKERS` to about 
 | --- | --- |
 | `502 Bad Gateway` | App not healthy yet: `./deploy/compose.sh logs --tail 100 ctfd` |
 | App cannot reach the database | RDS security group must allow 3306 from the EC2 security group; wrong endpoint/password in `DATABASE_URL`; run `scripts/db_check.py` |
+| `CERTIFICATE_VERIFY_FAILED ... unable to get local issuer certificate` | the CA bundle does not verify your database: run `./deploy/rds-tls-test.sh`, then `./deploy/fetch-rds-ca.sh <region>` (region bundle) |
+| `Host '...' is blocked because of many connection errors` | MariaDB blocks a server after too many failed connects, and even good logins are refused. Reboot the RDS instance (Actions > Reboot, no failover) or run `FLUSH HOSTS;` from another host, and set `max_connect_errors` = `1000000` in the parameter group |
 | Certificate request fails | DNS not pointing at the Elastic IP yet, or port 80 blocked in the EC2 security group |
 | Everyone logged out after a restart | `SECRET_KEY` changed. Keep the same value in `.env` |
 | Players see "Too many requests" | Raise `RATELIMIT_LOGIN` / `RATELIMIT_REGISTER` in `.env`, then `./deploy/compose.sh up -d` |
