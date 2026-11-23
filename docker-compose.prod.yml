@@ -8,6 +8,7 @@ services:
   ctfd:
     environment:
       - SESSION_COOKIE_SECURE=true
+      - PASSWORD_HASH_ROUNDS=${PASSWORD_HASH_ROUNDS:-10}
       - SQLALCHEMY_POOL_SIZE=${SQLALCHEMY_POOL_SIZE:-6}
       - SQLALCHEMY_MAX_OVERFLOW=${SQLALCHEMY_MAX_OVERFLOW:-4}
     # production runs the code baked into the image, not a live bind mount of the checkout

@@ -4,6 +4,8 @@ Step 1, create N test accounts that share one known password (inside the app con
     ./deploy/compose.sh exec -T -e PYTHONPATH=/opt/CTFd ctfd python scripts/login_burst.py create 1000
 Step 2, fire all N login requests at the SAME INSTANT and measure how long the server takes to answer them all:
     ./deploy/compose.sh exec -T ctfd python scripts/login_burst.py fire 1000 --base http://nginx
+    add  --journey  to also make every student open the challenge board and load everything a browser loads
+    (CSS, JS, images, the challenge list...), and report how many students were fully ready within 2 seconds.
 Step 3, remove the test accounts:
     ./deploy/compose.sh exec -T -e PYTHONPATH=/opt/CTFd ctfd python scripts/loadtest_cleanup.py
 
@@ -39,7 +41,7 @@ def create(n):
         print("test accounts ready: %d new (bt_0 .. bt_%d), password '%s'" % (len(rows), n - 1, PASSWORD))
 
 
-def fire(n, base):
+def fire(n, base, journey=False):
     import requests
 
     base = base.rstrip("/")
@@ -67,14 +69,29 @@ def fire(n, base):
     barrier = threading.Barrier(len(ready) + 1)
     results = []
 
+    asset_re = re.compile(r'(?:src|href)="(/themes/[^"]+)"')
+
+    def board(s):
+        """What a browser does right after login: open the board, load its files and the first API calls."""
+        r = s.get(base + "/challenges", timeout=120)
+        for a in set(asset_re.findall(r.text)):
+            s.get(base + a, timeout=120)
+        s.get(base + "/api/v1/challenges", timeout=120)
+        s.get(base + "/api/v1/users/me", timeout=120)
+        s.head(base + "/api/v1/notifications?since_id=0", timeout=120)
+
     def go(i, s, nonce):
         barrier.wait()
         t = time.time()
         try:
             r = s.post(base + "/login", data={"name": "bt_%d" % i, "password": PASSWORD, "nonce": nonce}, allow_redirects=False, timeout=120)
-            results.append((time.time() - t0, time.time() - t, r.status_code))
+            t_login = time.time() - t
+            code = r.status_code
+            if journey and code == 302:
+                board(s)
+            results.append((time.time() - t0, t_login, code, time.time() - t))
         except Exception as e:
-            results.append((time.time() - t0, time.time() - t, type(e).__name__))
+            results.append((time.time() - t0, time.time() - t, type(e).__name__, time.time() - t))
 
     t0 = 0
     ths = [threading.Thread(target=go, args=(i, s, nonce)) for i, (s, nonce) in ready]
@@ -99,6 +116,12 @@ def fire(n, base):
         print("  throughput while busy  : %.0f successful logins per second" % (len(ok) / max(done[-1], 0.001)))
         print("  one student's wait     : median %.1f s, 95th percentile %.1f s" % (statistics.median(lat), lat[int(len(lat) * 0.95) - 1]))
     print("  total time for the whole burst: %.1f s" % total)
+    if journey and ok:
+        tot = sorted(r[3] for r in ok)
+        under2 = sum(1 for x in tot if x <= 2.0)
+        print("\nFULL JOURNEY (login + board page + all its files + challenge list), per student:")
+        print("  ready within 2 s: %d of %d (%.0f%%)" % (under2, len(ok), 100.0 * under2 / len(ok)))
+        print("  median %.2f s | 95th percentile %.2f s | slowest %.2f s" % (statistics.median(tot), tot[int(len(tot) * 0.95) - 1], tot[-1]))
 
 
 if __name__ == "__main__":
@@ -109,4 +132,4 @@ if __name__ == "__main__":
         create(n)
     else:
         base = sys.argv[sys.argv.index("--base") + 1] if "--base" in sys.argv else "http://localhost"
-        fire(n, base)
+        fire(n, base, journey="--journey" in sys.argv)

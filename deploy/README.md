@@ -31,6 +31,7 @@ connection costs about 0.15 MB in total, so 10,000 connected players need roughl
 | ~2,000 | `2xlarge` (8 vCPU) | 6 | `db.m7g.large` |
 | ~5,000 | `4xlarge` (16 vCPU) | 12 | `db.m7g.xlarge`, Multi-AZ |
 | ~10,000 | `8xlarge` (32 vCPU) | 24 | `db.m7g.2xlarge`, Multi-AZ |
+| 1,000 logging in at the same instant, all under 2 s | **`c8i.32xlarge` - `48xlarge`** (see section 7c) | 96 - 140 | `db.m7g.2xlarge`, Multi-AZ |
 | **`c8i.16xlarge` (64 vCPU, 128 GB)** | | **48** | **`db.m7g.xlarge` (or `2xlarge` for maximum headroom), Multi-AZ** |
 
 **Plan for 1,000 - 5,000 players (recommended setup)**
@@ -231,43 +232,62 @@ Tested locally with 300 simulated players: 117 requests/s, no errors, p95 about 
 
 ---
 
-## 7c. What happens when 1,000 students press Login in the same second?
+## 7c. 1,000 students at the same instant: how to keep every request under 2 seconds
 
-Measured with `scripts/login_burst.py`: 1,000 browsers, each with the login page already open, all sending the login
-at the same instant (all from one IP address, like a college network).
+**Goal:** all 1,000 students log in and open the board in the same second, and nobody waits more than 2 s for anything.
 
-* **The server accepts all 1,000 at once and none crash or time out.** But finishing them takes time, because every
-  login runs a deliberately slow password check: **about 0.19 s of CPU per login**, so one app worker completes
-  about **4-5 logins per second**.
-* **Measured (6 workers):** all 1,000 logged in successfully, **25 logins/s**, the last one after **40 s**
-  (median wait 23 s).
-* **Rate limit:** limits are counted per IP. With the old template value `RATELIMIT_LOGIN=60,5` only **195 of 1,000** got
-  in and **805 were refused immediately** (they would have to retry). Use `RATELIMIT_LOGIN=2000,5` for the event.
+**What one student costs the server** (measured, `scripts/login_burst.py --journey`): about **85 ms of processor time**:
+password check 49 ms (bcrypt cost 10), the rest of the login 8 ms, board page 15 ms, three small API calls 14 ms.
+The CSS/JS/images are served by nginx and cost the app nothing. So a burst of N students needs about `N x 85 ms` of CPU,
+and **the wait of the last student is roughly `N x 0.085 x 1.3 / effective_cores`** seconds (1.3 = overhead for nginx, TLS, Redis, DB).
 
-| `WORKERS` | logins per second | all 1,000 done after | all 5,000 done after |
-| --- | --- | --- | --- |
-| 6 (measured) | 25 | 40 s | 3.3 min |
-| 12 | ~50 | ~20 s | ~100 s |
-| 32 | ~135 | ~7.5 s | ~37 s |
-| 48 | ~200 | ~5 s | ~25 s |
+**Measured scale model** (300 simultaneous students, about 6 effective cores): 0 errors; login median 1.7 s, board page median 1.1 s,
+p99 3.1 s, slowest 3.6 s. This matches the formula, so the formula is what you use to choose hardware.
 
-(Larger rows are projections from the measured per-worker speed; real EC2 cores may be a little faster.)
+On Intel EC2 a vCPU is one hyper-thread, so count about **0.65 effective cores per vCPU**:
 
-**So: no server can finish 1,000 password logins in one second, but a 32-48 worker setup clears the whole rush in 5-8 seconds,
-and nothing breaks.** Ways to make it painless:
-* Open registration **a few days before** the event. A login lasts **7 days**, so on event day most students are already logged in.
-* Tell students to log in a few minutes early (before 11:00).
-* The home page, Rules, scoreboard and countdown do not use the database or passwords, so they stay fast during the rush.
-* Raising the limit lets one IP try passwords faster, but each guess still costs 0.19 s of CPU, which caps an attacker at roughly
-  the same ~135-200 tries/s, and passwords must be 8+ characters. After the first rush you can lower it again (edit `.env`, then `./deploy/compose.sh up -d`).
+| Instance (event day) | vCPU | effective cores | last student of 1,000 | everyone under 2 s? |
+| --- | --- | --- | --- | --- |
+| `c8i.16xlarge` | 64 | ~41 | ~2.7 s | **No** (most are, the last ~30% are not) |
+| `c8i.24xlarge` | 96 | ~62 | ~1.8 s | just about |
+| `c8i.32xlarge` | 128 | ~83 | ~1.3 s | **Yes** |
+| `c8i.48xlarge` | 192 | ~125 | ~0.9 s | **Yes, with comfortable margin** |
 
-Reproduce it yourself (creates and removes test accounts):
+These are estimates (about plus or minus 30%). **The only real proof is to run the test on the real server:**
 
 ```bash
+# (event window open, rate limits raised as in .env.production.example)
 ./deploy/compose.sh exec -T -e PYTHONPATH=/opt/CTFd ctfd python scripts/login_burst.py create 1000
-./deploy/compose.sh exec -T ctfd python scripts/login_burst.py fire 1000 --base http://nginx
+T0=$(date +%s); ./deploy/compose.sh exec -T ctfd python scripts/login_burst.py fire 1000 --base http://nginx --journey
+./deploy/compose.sh logs --no-log-prefix --since $(( $(date +%s) - T0 + 5 ))s nginx | python3 scripts/slowlog.py
 ./deploy/compose.sh exec -T -e PYTHONPATH=/opt/CTFd ctfd python scripts/loadtest_cleanup.py
 ```
+
+`slowlog.py` prints the server-side time of every request type and how many took longer than 2 s (goal: 0 and no HTTP 5xx).
+Start on the instance you have, then resize (stop > change instance type > start, a few minutes) to the next size until it passes.
+The bigger instance only needs to run for the event day. Set `WORKERS` to about **75% of the vCPUs** (c8i.48xlarge: `WORKERS=140`).
+
+**Settings that make this work (already in the repo / `.env.production.example`):**
+* `PASSWORD_HASH_ROUNDS=10` (4x cheaper logins than the upstream default 12; never below 10)
+* `RATELIMIT_LOGIN=2000,5`, `RATELIMIT_REGISTER=2000,5`, `RATELIMIT_EVENTS=5000,60` (limits are per IP; one college = one IP)
+* nginx serves all CSS/JS/images/fonts itself (long cache) and reuses connections to the app
+* `WORKERS x (SQLALCHEMY_POOL_SIZE + SQLALCHEMY_MAX_OVERFLOW)` must stay below the database `max_connections`, otherwise a burst
+  causes HTTP 500 "Too many connections" (this happened in my first local test). 140 workers x 10 = 1,400, so use `db.m7g.2xlarge` (about 2,700 allowed).
+  `scripts/db_check.py` prints a warning if the numbers do not fit.
+
+**What can still go wrong (and what to do)**
+
+| Risk | What happens | What to do |
+| --- | --- | --- |
+| Not enough CPU cores | the last students of the burst wait 2-4 s | bigger instance (table above), verified with the test |
+| Database connection limit | some requests fail with 500 | keep `WORKERS x 10` below `max_connections`; use the bigger RDS |
+| Rate limit per IP too low | students get "Too many requests" at once | `RATELIMIT_*` values above |
+| Cold start (just restarted) | first requests rebuild caches, a bit slower | open the site and the scoreboard a few minutes before 11:00; never restart during the event |
+| A student's own Wi-Fi or phone | slow no matter what the server does | not controllable; ask students to use wired or good Wi-Fi |
+| First connection to a distant location | the TLS handshake adds 100-300 ms | normal; our numbers are server-side times |
+| 4:00 PM writeup rush | 1,000 students upload screenshots at once: needs bandwidth, disk and about 50-200 ms CPU per image | the same big instance handles it; tell students to upload one at a time and keep screenshots small |
+| Everything on one server | if it fails, the event stops | RDS Multi-AZ, backups every hour on event day, a pre-tested restore, and a spare instance image (AMI) |
+| Students log in days earlier | the burst mostly disappears (a login lasts 7 days) | open registration early and ask everyone to log in the day before |
 
 ---
 

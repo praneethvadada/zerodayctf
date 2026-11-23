@@ -18,3 +18,12 @@ with eng.connect() as c:
     print("max conn :", one("select @@max_connections")[0], "| in use now:", one("show status like 'Threads_connected'")[1])
     print("tables   :", one("select count(*) from information_schema.tables where table_schema = database()")[0])
     print("grants   :", [r[0] for r in c.execute(text("show grants for current_user()"))][:2])
+
+import os
+workers = int(os.environ.get("WORKERS", "1") or 1)
+per = int(os.environ.get("SQLALCHEMY_POOL_SIZE", "6") or 6) + int(os.environ.get("SQLALCHEMY_MAX_OVERFLOW", "4") or 4)
+with eng.connect() as c:
+    limit = int(c.execute(text("select @@max_connections")).fetchone()[0])
+need = workers * per
+print("pool check:", workers, "workers x", per, "connections =", need, "possible connections vs database limit", limit)
+print("           ", "OK" if need < limit * 0.8 else "WARNING: lower WORKERS / pool sizes or use a bigger database, otherwise bursts will fail with 'Too many connections'")
