@@ -44,7 +44,7 @@
               <tr>
                 <th scope="row" class="text-center" x-text="index + 1"></th>
                 <td class="text-start">
-                  <a :href="standing.account_url" x-text="standing.name"></a>
+                  {% if Configs.account_visibility == 'admins' %}<span x-text="standing.name"></span>{% else %}<a :href="standing.account_url" x-text="standing.name"></a>{% endif %}
                   <template x-if="standing.bracket_name">
                     <span class="badge bg-secondary ms-2" x-text="standing.bracket_name"></span>
                   </template>

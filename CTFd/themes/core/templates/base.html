@@ -113,8 +113,10 @@
         <ul>
           <li><a href="/rules">Rules</a></li>
           <li><a href="{{ url_for('challenges.listing') }}">Challenges</a></li>
-          {% if authed() %}
+          {% if authed() and Configs.score_visibility != 'admins' %}
           <li><a href="{{ url_for('scoreboard.listing') }}">Scoreboard</a></li>
+          {% endif %}
+          {% if authed() and Configs.account_visibility != 'admins' %}
           <li><a href="{{ url_for('users.listing') }}">Players</a></li>
           {% endif %}
         </ul>

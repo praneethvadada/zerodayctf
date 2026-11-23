@@ -38,7 +38,7 @@ SETTINGS = {
         "ZeroDayCTF is a capture-the-flag (CTF) cybersecurity competition. Hack real-world "
         "challenges, learn practical security skills and compete on a live scoreboard."
     ),
-    "account_visibility": "private",
+    "account_visibility": "admins",   # the Users/Players pages are for admins only
     "score_visibility": "private",
     "challenge_visibility": "private",
     "registration_visibility": "public",
