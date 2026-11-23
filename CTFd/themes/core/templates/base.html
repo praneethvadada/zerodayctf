@@ -30,7 +30,7 @@
   <meta name="robots" content="{{ 'index, follow, max-image-preview:large' if zd_public else 'noindex, nofollow' }}">
   <meta name="author" content="Trivon Software Solutions Private Limited">
   <meta name="application-name" content="ZeroDayCTF">
-  <meta name="theme-color" content="#5b1a52">
+  <meta name="theme-color" content="#050b14">
   <link rel="canonical" href="{{ zd_url }}">
 
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -58,11 +58,12 @@
 
   {% block stylesheets %}
     {{ Assets.css("assets/scss/main.scss") }}
-    <link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='core', path='css/zeroday.css', v=11) }}">
+    <link rel="stylesheet" href="{{ url_for('views.themes_beta', theme='core', path='css/zeroday.css', v=13) }}">
   {% endblock %}
 
   {{ Plugins.styles }}
 
+  <script>try{if(!localStorage.getItem('theme')){localStorage.setItem('theme','dark');}}catch(e){}</script>
   {{ Assets.js("assets/js/color_mode_switcher.js", type=None) }}
 
   <script type="text/javascript">
