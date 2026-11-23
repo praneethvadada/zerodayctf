@@ -1,0 +1,4 @@
+# Install:  sudo cp deploy/zerodayctf.cron /etc/cron.d/zerodayctf   (edit paths if the repo is elsewhere)
+# Nightly backup at 02:30 UTC, plus an hourly backup during the event day (29 Nov 2026).
+30 2 * * *  ubuntu  cd /home/ubuntu/zerodayctf && ./deploy/backup.sh >> /var/log/zerodayctf-backup.log 2>&1
+15 * 29 11 * ubuntu  cd /home/ubuntu/zerodayctf && ./deploy/backup.sh >> /var/log/zerodayctf-backup.log 2>&1

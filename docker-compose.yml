@@ -6,11 +6,14 @@ services:
       - "8000"
     environment:
       - UPLOAD_FOLDER=/var/uploads
-      - DATABASE_URL=mysql+pymysql://ctfd:${DB_PASSWORD:?Set DB_PASSWORD in .env}@db/ctfd
+      # DATABASE_URL points at AWS RDS in production; otherwise the bundled MariaDB container is used
+      - DATABASE_URL=${DATABASE_URL:-mysql+pymysql://ctfd:${DB_PASSWORD:?Set DB_PASSWORD (or DATABASE_URL) in .env}@db/ctfd}
       - REDIS_URL=redis://:${REDIS_PASSWORD:?Set REDIS_PASSWORD in .env}@cache:6379
       - SECRET_KEY=${SECRET_KEY:?Set SECRET_KEY in .env}
       - WORKERS=${WORKERS:-4}
       - UPDATE_CHECK=false
+      - RATELIMIT_LOGIN=${RATELIMIT_LOGIN:-}
+      - RATELIMIT_REGISTER=${RATELIMIT_REGISTER:-}
       - SESSION_COOKIE_SECURE=${SESSION_COOKIE_SECURE:-false}
       - LOG_FOLDER=/var/log/CTFd
       - ACCESS_LOG=-
@@ -54,10 +57,10 @@ services:
     image: mariadb:10.11
     restart: always
     environment:
-      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:?Set DB_ROOT_PASSWORD in .env}
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-}
       - MARIADB_ROOT_HOST=localhost
       - MARIADB_USER=ctfd
-      - MARIADB_PASSWORD=${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      - MARIADB_PASSWORD=${DB_PASSWORD:-}
       - MARIADB_DATABASE=ctfd
       - MARIADB_AUTO_UPGRADE=1
     volumes:

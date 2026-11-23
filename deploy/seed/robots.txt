@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /$
+Allow: /rules
+Allow: /register
+Disallow: /admin
+Disallow: /api/
+Disallow: /login
+Disallow: /settings
+Disallow: /notifications
+Disallow: /writeups
+Disallow: /challenges
+Disallow: /scoreboard
+Disallow: /users
+Disallow: /teams
+Disallow: /files/
+Disallow: /events
+
+Sitemap: https://www.zerodayctf.com/sitemap.xml

@@ -37,6 +37,10 @@ ZerodayCTF is a self-hosted CTF platform where players solve security challenges
 - Gunicorn (gevent) behind Nginx
 - Docker and Docker Compose
 
+## Deploying to production
+
+See [deploy/README.md](deploy/README.md) for the AWS (EC2 + RDS) runbook, backups and the event-day checklist.
+
 ## Run with Docker
 
 ```bash

@@ -95,3 +95,6 @@ CTFd/themes/*
 !CTFd/themes/core-deprecated/
 # Secrets
 .env
+
+# deployment state
+.deploy_prev

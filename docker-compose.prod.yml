@@ -1,7 +1,30 @@
-# Production override: HTTPS for zerodayctf.com
-# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
-# Certificates (Let's Encrypt) are expected at ./.data/certbot/conf/live/zerodayctf.com/
+# Production override: HTTPS for www.zerodayctf.com
+#
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#   (with AWS RDS also add:  -f docker-compose.rds.yml)
+#
+# Certificates (Let's Encrypt) live in ./.data/certbot/conf/live/zerodayctf.com/ (see deploy/init-certs.sh)
 services:
+  ctfd:
+    environment:
+      - SESSION_COOKIE_SECURE=true
+      - SQLALCHEMY_MAX_OVERFLOW=5
+    # production runs the code baked into the image, not a live bind mount of the checkout
+    volumes: !override
+      - ./.data/CTFd/logs:/var/log/CTFd
+      - ./.data/CTFd/uploads:/var/uploads
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/healthcheck', timeout=3).status == 200 else 1)"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    logging: &logging
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
   nginx:
     volumes:
       - ./conf/nginx/https.conf:/etc/nginx/nginx.conf:ro
@@ -10,10 +33,19 @@ services:
     ports:
       - 80:80
       - 443:443
+    depends_on:
+      ctfd:
+        condition: service_healthy
+    logging: *logging
+
+  cache:
+    logging: *logging
 
   certbot:
     image: certbot/certbot
+    restart: always
     volumes:
       - ./.data/certbot/conf:/etc/letsencrypt
       - ./.data/certbot/www:/var/www/certbot
     entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot; sleep 12h & wait $${!}; done"
+    logging: *logging
