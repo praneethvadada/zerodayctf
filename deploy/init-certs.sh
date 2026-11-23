@@ -43,12 +43,14 @@ if [ "$SELF_ONLY" -eq 0 ]; then
 fi
 
 mkdir -p "$CONF" .data/certbot/www
-if [ ! -f "$LIVE/fullchain.pem" ]; then
+# certbot runs as root, so the certificate folders belong to root: use sudo for file checks/changes
+SUDO=""; [ "$(id -u)" -ne 0 ] && SUDO="sudo"
+if ! $SUDO test -f "$LIVE/fullchain.pem"; then
   echo "==> Creating a temporary self-signed certificate so nginx can start"
-  mkdir -p "$LIVE"
-  openssl req -x509 -nodes -newkey rsa:2048 -days 2 -subj "/CN=$DOMAIN" \
-    -keyout "$LIVE/privkey.pem" -out "$LIVE/fullchain.pem" >/dev/null 2>&1
-  touch "$LIVE/.temporary"
+  $SUDO mkdir -p "$LIVE"
+  $SUDO openssl req -x509 -nodes -newkey rsa:2048 -days 2 -subj "/CN=$DOMAIN" \
+    -keyout "$LIVE/privkey.pem" -out "$LIVE/fullchain.pem" || { echo "Could not create the temporary certificate"; exit 1; }
+  $SUDO touch "$LIVE/.temporary"
 fi
 
 echo "==> Starting the stack"
@@ -62,9 +64,10 @@ fi
 
 if [ "$SELF_ONLY" -eq 1 ]; then echo "Self-signed certificate in place (local testing)."; exit 0; fi
 
-if [ -f "$LIVE/.temporary" ]; then
-  echo "==> Removing the temporary certificate"
-  rm -rf "${CONF:?}/live/$DOMAIN" "${CONF:?}/archive/$DOMAIN" "${CONF:?}/renewal/$DOMAIN.conf"
+# remove the temporary certificate, or an earlier --staging (test) certificate when asking for the real one
+if $SUDO test -f "$LIVE/.temporary" || { [ -z "$STAGING" ] && $SUDO grep -qs "acme-staging" "$CONF/renewal/$DOMAIN.conf"; }; then
+  echo "==> Removing the temporary/test certificate"
+  $SUDO rm -rf "${CONF:?}/live/$DOMAIN" "${CONF:?}/archive/$DOMAIN" "${CONF:?}/renewal/$DOMAIN.conf"
 fi
 
 echo "==> Requesting the real certificate from Let's Encrypt ${STAGING:+(STAGING)}"
