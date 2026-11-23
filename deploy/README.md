@@ -33,6 +33,20 @@ connection costs about 0.15 MB in total, so 10,000 connected players need roughl
 | ~10,000 | `8xlarge` (32 vCPU) | 24 | `db.m7g.2xlarge`, Multi-AZ |
 | **`c8i.16xlarge` (64 vCPU, 128 GB)** | | **48** | **`db.m7g.xlarge` (or `2xlarge` for maximum headroom), Multi-AZ** |
 
+**Plan for 1,000 - 5,000 players (recommended setup)**
+
+| Item | Choice |
+| --- | --- |
+| EC2 | the existing `c8i.16xlarge` is fine for event day (a `c8i.4xlarge` also works and is cheaper) |
+| `WORKERS` | `32` on the 16xlarge (or `12` on a 4xlarge) |
+| RDS | `db.m7g.xlarge`, **Multi-AZ**, 50 GB gp3 with autoscaling, 14-day backups |
+| Pool settings | `SQLALCHEMY_POOL_SIZE=6`, `SQLALCHEMY_MAX_OVERFLOW=4` (32 workers x 10 = 320 connections, far below the 1,360 allowed) |
+| Rate limits | `RATELIMIT_LOGIN=60,5`, `RATELIMIT_REGISTER=60,5`, `RATELIMIT_EVENTS=5000,60` |
+
+The busiest moment is the first minutes (everyone registers, logs in and opens the board at once): 5,000 players
+is roughly 1,500-2,000 requests/s for about 30 seconds. After that it drops to a few hundred requests/s.
+Run the load test below at least a week before the event, then stop or resize the server after the event.
+
 `c8i.16xlarge` is far more than a CTF needs. On the app side it can serve roughly 6,000 page requests/s, which is
 **10,000+ active players** (a player averages well under 1 request/s). The limits that appear next are the database
 and the single Redis container, not the server. If `m7g` is not offered in your region use the same vCPU/RAM in
@@ -194,10 +208,34 @@ Health report any time: `./deploy/check.sh`.
 
 ---
 
+## 7b. Load test before the event
+
+Simulates real players (register, log in, browse the board, check the scoreboard, submit wrong flags).
+The event window must be open while you test. Run it from a different machine if possible (a small EC2 instance
+in the same region); one generator handles about 1,000 players.
+
+```bash
+pip install requests
+python3 scripts/loadtest.py --base https://www.zerodayctf.com --users 1000 --duration 180 --ramp 30
+```
+
+It prints the speed of every request type and PASS/ATTENTION (goal: under 1% errors and p95 under 1.5 s).
+Run it more than once and raise `--users` step by step (500, 1000, 2000...). Watch `./deploy/check.sh`,
+RDS CPU in CloudWatch and `docker stats` while it runs. Then delete the test accounts:
+
+```bash
+./deploy/compose.sh exec -T -e PYTHONPATH=/opt/CTFd ctfd python scripts/loadtest_cleanup.py
+```
+
+Tested locally with 300 simulated players: 117 requests/s, no errors, p95 about 0.5 s.
+
+---
+
 ## 8. Event checklist
 
 **One week before**
 - [ ] Real challenges loaded and solved by a test account; all flags and hints verified
+- [ ] Load test passed at 1,000+ simulated players; test accounts removed afterwards
 - [ ] Throwaway test accounts and their submissions deleted
 - [ ] Schedule correct in Admin > Config > Time (11:00, 16:00; writeup window to 18:00 IST)
 - [ ] Admin password changed, admin account email correct
