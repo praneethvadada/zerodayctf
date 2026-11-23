@@ -25,6 +25,8 @@ else
 fi
 
 ./deploy/compose.sh up -d --build
+# nginx resolves the app's address only once at start: restart it so it never points at a replaced container
+./deploy/compose.sh restart nginx
 wait_healthy
 git log --oneline -1
 ./deploy/compose.sh ps

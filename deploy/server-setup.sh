@@ -41,7 +41,7 @@ if [ "$(swapon --show | wc -l)" -eq 0 ] && [ "$(free -m | awk '/Mem:/ {print $2}
 fi
 
 echo "==> Kernel limits for many simultaneous connections"
-printf 'net.core.somaxconn=4096\nnet.ipv4.tcp_max_syn_backlog=4096\nfs.file-max=200000\n' | sudo tee /etc/sysctl.d/99-zerodayctf.conf >/dev/null
+printf 'net.core.somaxconn=8192\nnet.ipv4.tcp_max_syn_backlog=8192\nnet.core.netdev_max_backlog=16384\nnet.ipv4.ip_local_port_range=1024 65535\nnet.ipv4.tcp_tw_reuse=1\nfs.file-max=2000000\n' | sudo tee /etc/sysctl.d/99-zerodayctf.conf >/dev/null
 sudo sysctl --system >/dev/null
 
 echo

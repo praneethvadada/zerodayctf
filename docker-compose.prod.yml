@@ -8,7 +8,8 @@ services:
   ctfd:
     environment:
       - SESSION_COOKIE_SECURE=true
-      - SQLALCHEMY_MAX_OVERFLOW=5
+      - SQLALCHEMY_POOL_SIZE=${SQLALCHEMY_POOL_SIZE:-6}
+      - SQLALCHEMY_MAX_OVERFLOW=${SQLALCHEMY_MAX_OVERFLOW:-4}
     # production runs the code baked into the image, not a live bind mount of the checkout
     volumes: !override
       - ./.data/CTFd/logs:/var/log/CTFd
@@ -18,7 +19,7 @@ services:
       interval: 20s
       timeout: 5s
       retries: 5
-      start_period: 60s
+      start_period: 180s
     logging: &logging
       driver: json-file
       options:

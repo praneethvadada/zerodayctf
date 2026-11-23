@@ -18,15 +18,36 @@ need your AWS account: RDS creation, DNS and the real Let's Encrypt certificate.
 
 ---
 
-## 0. Sizing (starting point, measured locally)
+## 0. Sizing (measured locally, then scaled: confirm with a load test on the real servers)
 
-| Players | EC2 | RDS | Notes |
+What was measured (laptop Docker VM, 6 app workers): about **130 requests/s per worker** for full pages and
+**170-190 requests/s per worker** for logged-in API calls. The home page, Rules, scoreboard and the countdown
+make **0 database queries** (cached); a logged-in API call makes about **4 quick queries**. One live-update
+connection costs about 0.15 MB in total, so 10,000 connected players need roughly 1.5 GB.
+
+| Simultaneous players | EC2 (c8i) | `WORKERS` | RDS MariaDB (general purpose) |
 | --- | --- | --- | --- |
-| up to ~300 | `t3.medium` (2 vCPU, 4 GB) | `db.t4g.small` | 30 GB gp3 disk |
-| 300 - 800 | `t3.large` (2 vCPU, 8 GB) | `db.t4g.medium` | turn on "unlimited" CPU credits |
+| up to ~500 | `large` or `xlarge` | 2-4 | `db.t4g.medium` |
+| ~2,000 | `2xlarge` (8 vCPU) | 6 | `db.m7g.large` |
+| ~5,000 | `4xlarge` (16 vCPU) | 12 | `db.m7g.xlarge`, Multi-AZ |
+| ~10,000 | `8xlarge` (32 vCPU) | 24 | `db.m7g.2xlarge`, Multi-AZ |
+| **`c8i.16xlarge` (64 vCPU, 128 GB)** | | **48** | **`db.m7g.xlarge` (or `2xlarge` for maximum headroom), Multi-AZ** |
 
-Local load test (2 app workers): home page ~450 requests/s, challenges list ~580/s, scoreboard ~1600/s, challenges page
-~250/s with zero errors. A 500-player event peaks far below that. Use the same AWS region for EC2 and RDS.
+`c8i.16xlarge` is far more than a CTF needs. On the app side it can serve roughly 6,000 page requests/s, which is
+**10,000+ active players** (a player averages well under 1 request/s). The limits that appear next are the database
+and the single Redis container, not the server. If `m7g` is not offered in your region use the same vCPU/RAM in
+`m6g` or `m6i`. Use the same AWS region for EC2 and RDS.
+
+**RDS connection limit.** Every worker keeps up to `SQLALCHEMY_POOL_SIZE + SQLALCHEMY_MAX_OVERFLOW` (default 6 + 4)
+database connections. Keep `WORKERS x 10` below RDS `max_connections`, which is about `memory / 12 MB` by default:
+4 GB = ~340, 8 GB = ~680, 16 GB = ~1,360, 32 GB = ~2,730. (48 workers x 10 = 480, so 16 GB or more.)
+
+**Players behind one network.** Rate limits are per IP address, so a college network looks like one very busy user.
+The defaults in `deploy/.env.production.example` (`RATELIMIT_LOGIN`, `RATELIMIT_REGISTER`, `RATELIMIT_EVENTS`) are raised for this.
+Without raising `RATELIMIT_EVENTS`, only 150 players per minute behind one IP could connect for live notifications.
+
+**After every deploy nginx must be restarted** (`deploy.sh` does this): it looks up the app's address only once,
+so a replaced app container would otherwise cause `502` errors.
 
 ---
 
